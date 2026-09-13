@@ -1,11 +1,41 @@
-<div align="center">
+# Cognitive Edge Website
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Official website for Cognitive Edge LTD ("Intelligence Beyond Reality").
 
-  <h1>Built with AI Studio</h2>
+## Prerequisites
+* Node.js (v18 or higher recommended)
+* npm
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Setup Instructions
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-</div>
+2. **Run in development mode:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Build for production:**
+   ```bash
+   npm run build
+   ```
+
+---
+
+## Deploying to Vercel
+
+When importing your project into Vercel, use the following configuration settings:
+
+| Setting | Value |
+| :--- | :--- |
+| **Framework Preset** | **Vite** |
+| **Root Directory** | `./` (default) |
+| **Build Command** | `vite build` |
+| **Output Directory** | `dist` |
+| **Install Command** | `npm install` |
+
+A `vercel.json` file is already included in the root directory to handle SPA rewrites and routing automatically.
+

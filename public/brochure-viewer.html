@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Project Brochure & Architectural Specifications - Cognitive Edge</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #020617;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+    header {
+      height: 56px;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 20;
+    }
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button, a.btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #e2e8f0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    button:hover, a.btn:hover {
+      background: #334155;
+      color: #ffffff;
+    }
+    button.primary {
+      background: #2563eb;
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+    button.primary:hover {
+      background: #1d4ed8;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(37, 99, 235, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    #viewer-stage {
+      flex: 1;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #020617;
+    }
+    #pdf-iframe {
+      border: none;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div id="app-container">
+    <header>
+      <div class="brand-title">
+        <a href="/#credentials" class="btn" title="Back to website">← Back</a>
+        <span>Digital Project Brochure & Architectural Specifications</span>
+      </div>
+      <div class="controls">
+        <span class="badge" id="rotation-badge">90° Rotated</span>
+        <button class="primary" id="btn-rotate-cw" title="Rotate 90 degrees clockwise">↻ Rotate 90°</button>
+        <button id="btn-rotate-ccw" title="Rotate counter-clockwise">↺</button>
+        <button id="btn-reset" title="Reset to 0°">0° Reset</button>
+        <a
+          href="https://drive.google.com/file/d/1VyImKdDRYw6X-IWGyf745ByxKt5vEoja/view?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn"
+          title="Open original file in Google Drive"
+        >
+          Google Drive ↗
+        </a>
+      </div>
+    </header>
+    <div id="viewer-stage">
+      <iframe
+        id="pdf-iframe"
+        src="https://drive.google.com/file/d/1VyImKdDRYw6X-IWGyf745ByxKt5vEoja/preview"
+        allow="autoplay"
+        title="Brochure PDF"
+      ></iframe>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var stage = document.getElementById("viewer-stage");
+      var iframe = document.getElementById("pdf-iframe");
+      var badge = document.getElementById("rotation-badge");
+
+      // Parse rotate param, default to 90 degrees
+      var urlParams = new URLSearchParams(window.location.search);
+      var initialRotate = urlParams.get("rotate");
+      var rotation = initialRotate !== null ? (parseInt(initialRotate, 10) || 90) : 90;
+
+      function updateLayout() {
+        var w = stage.clientWidth;
+        var h = stage.clientHeight;
+        var is90or270 = rotation % 180 !== 0;
+
+        if (is90or270) {
+          iframe.style.width = h + "px";
+          iframe.style.height = w + "px";
+        } else {
+          iframe.style.width = "100%";
+          iframe.style.height = "100%";
+        }
+
+        iframe.style.transform = "rotate(" + rotation + "deg)";
+        badge.textContent = rotation + "° Rotated";
+      }
+
+      document.getElementById("btn-rotate-cw").addEventListener("click", function() {
+        rotation = (rotation + 90) % 360;
+        updateLayout();
+      });
+
+      document.getElementById("btn-rotate-ccw").addEventListener("click", function() {
+        rotation = (rotation - 90 + 360) % 360;
+        updateLayout();
+      });
+
+      document.getElementById("btn-reset").addEventListener("click", function() {
+        rotation = 0;
+        updateLayout();
+      });
+
+      window.addEventListener("resize", updateLayout);
+      updateLayout();
+    })();
+  </script>
+</body>
+</html>
