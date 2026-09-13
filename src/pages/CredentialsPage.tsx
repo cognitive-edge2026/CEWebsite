@@ -569,7 +569,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                   {/* Directly beneath the viewer: Descriptive line and 'Open Brochure in New Tab' button */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
                     <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl">
-                      Explore complete floor plans, terrace amenities, and architectural specifications for The Sixteen with rotated layout in a new tab.
+                      Explore complete floor plans, terrace amenities, and architectural specifications for The Sixteen in a new tab.
                     </p>
                     <a
                       id="btn-open-brochure-new-tab"
@@ -579,7 +579,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                       className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md shrink-0 cursor-pointer group"
                     >
                       <FileText className="w-4 h-4" />
-                      <span>Open Brochure in New Tab (Rotated 90°)</span>
+                      <span>Open Brochure in New Tab</span>
                       <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </a>
                   </div>
