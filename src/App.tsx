@@ -54,19 +54,23 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 }
 
 export function App() {
+  // Light mode as default when the website is invoked or loaded
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       try {
-        const saved = localStorage.getItem("ce_theme");
-        if (saved) return saved === "dark";
-        if (typeof window.matchMedia === "function") {
-          return window.matchMedia("(prefers-color-scheme: dark)").matches;
-        }
+        // Clean up legacy auto-saved theme from earlier sessions so it doesn't force dark mode
+        localStorage.removeItem("ce_theme");
+
+        // If user manually toggled during this browser session, respect their active session choice
+        const sessionPreference = sessionStorage.getItem("ce_theme_mode");
+        if (sessionPreference === "dark") return true;
+        if (sessionPreference === "light") return false;
       } catch {
         // Storage access may be restricted in sandboxed iframes
         return false;
       }
     }
+    // Default strictly to false (Light Mode)
     return false;
   });
 
@@ -157,10 +161,8 @@ export function App() {
       const root = document.documentElement;
       if (darkMode) {
         root.classList.add("dark");
-        localStorage.setItem("ce_theme", "dark");
       } else {
         root.classList.remove("dark");
-        localStorage.setItem("ce_theme", "light");
       }
     } catch {
       // Storage access may be restricted in sandboxed iframes
@@ -168,7 +170,15 @@ export function App() {
   }, [darkMode]);
 
   const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
+    setDarkMode((prev) => {
+      const next = !prev;
+      try {
+        sessionStorage.setItem("ce_theme_mode", next ? "dark" : "light");
+      } catch {
+        // Storage access may be restricted in sandboxed iframes
+      }
+      return next;
+    });
   };
 
   const handleSelectService = (serviceTitle: string) => {
