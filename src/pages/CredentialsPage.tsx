@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import {
   Glasses,
   Video,
@@ -85,58 +84,35 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans">
-      {/* Top Sticky Header */}
-      <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 py-3.5 px-4 sm:px-6 lg:px-8 shadow-xs">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <button
-            onClick={onBackToHome}
-            id="credentials-back-home-top-btn"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-cyan-400 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Home</span>
-          </button>
-
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 hidden sm:inline-block">
-              Cognitive Edge LTD
-            </span>
-            <button
-              onClick={onToggleDarkMode}
-              className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              title="Toggle theme"
-            >
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={onContactClick}
-              className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors"
-            >
-              Contact Us
-            </button>
-          </div>
-        </div>
-      </header>
-
       {/* Main Page Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 mb-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+        {/* Breadcrumb & Navigation */}
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <nav className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+            <button
+              onClick={onBackToHome}
+              className="hover:text-blue-600 dark:hover:text-cyan-400 transition-colors inline-flex items-center gap-1.5 font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Home</span>
+            </button>
+            <span>/</span>
+            <span className="text-slate-700 dark:text-slate-300 font-medium">
+              Our Credentials
+            </span>
+            <span>/</span>
+            <span className="text-blue-600 dark:text-cyan-400 font-bold">
+              {currentOption.label}
+            </span>
+          </nav>
+
           <button
-            onClick={onBackToHome}
-            className="hover:text-blue-600 dark:hover:text-cyan-400 transition-colors"
+            onClick={onContactClick}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black hover:bg-neutral-900 border border-neutral-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer"
           >
-            Home
+            Inquire About This Service
           </button>
-          <span>/</span>
-          <span className="text-slate-800 dark:text-slate-200 font-semibold">
-            Our Credentials
-          </span>
-          <span>/</span>
-          <span className="text-blue-600 dark:text-cyan-400 font-bold">
-            {currentOption.label}
-          </span>
-        </nav>
+        </div>
 
         {/* Page Hero Header */}
         <div className="mb-10 text-center sm:text-left sm:flex sm:items-end sm:justify-between gap-6 border-b border-slate-200 dark:border-slate-800 pb-8">
@@ -194,9 +170,9 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                     key={opt.id}
                     id={`pill-btn-${opt.id}`}
                     onClick={() => setSelectedOptionId(opt.id)}
-                    className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                    className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                       isActive
-                        ? "bg-blue-600 text-white shadow-xs"
+                        ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
                         : "bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                     }`}
                   >
@@ -210,17 +186,9 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
         </div>
 
         {/* Dynamic Category Showcase */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentOption.id}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.35 }}
-            className="space-y-10"
-          >
-            {/* Category Media Showcase */}
-            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 lg:p-10 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="space-y-10">
+          {/* Category Media Showcase */}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 lg:p-10 border border-slate-200 dark:border-slate-800 shadow-sm">
               {/* SPECIFICALLY FOR VR WALKTHROUGH SUBSECTION: Responsive 16:9 Video Iframe */}
               {currentOption.id === "vr-walkthrough" && (
                 <div
@@ -230,7 +198,6 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">
                       <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600 dark:bg-cyan-400"></span>
                       </span>
                       <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
@@ -277,7 +244,6 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">
                       <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600 dark:bg-cyan-400"></span>
                       </span>
                       <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
@@ -374,7 +340,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         onClick={() => setRenderFilter("all")}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           renderFilter === "all"
-                            ? "bg-white dark:bg-blue-600 text-slate-900 dark:text-white shadow-xs"
+                            ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
                             : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                         }`}
                       >
@@ -385,7 +351,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         onClick={() => setRenderFilter("credentials")}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           renderFilter === "credentials"
-                            ? "bg-white dark:bg-blue-600 text-slate-900 dark:text-white shadow-xs"
+                            ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
                             : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                         }`}
                       >
@@ -396,7 +362,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         onClick={() => setRenderFilter("renders")}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           renderFilter === "renders"
-                            ? "bg-white dark:bg-blue-600 text-slate-900 dark:text-white shadow-xs"
+                            ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
                             : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                         }`}
                       >
@@ -431,7 +397,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         href="https://lh3.googleusercontent.com/d/1UedSm-xJlTffPnZBI7aart40ioi7mEbW"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shrink-0 shadow-xs"
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white text-xs font-bold transition-colors shrink-0 shadow-xs cursor-pointer"
                       >
                         <span>View Master Render</span>
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -514,7 +480,6 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5">
                       <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600 dark:bg-cyan-400"></span>
                       </span>
                       <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
@@ -528,7 +493,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                       <button
                         type="button"
                         onClick={() => setBrochureRotation((prev) => (prev + 90) % 360)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 hover:text-white text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-800 hover:bg-black hover:text-white text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
                         title="Rotate preview 90 degrees"
                       >
                         <RotateCw className="w-3.5 h-3.5" />
@@ -576,7 +541,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                       href={`/brochure-viewer?rotate=${brochureRotation || 90}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md shrink-0 cursor-pointer group"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm bg-black hover:bg-neutral-900 border border-neutral-700 text-white transition-all shadow-md shrink-0 cursor-pointer group"
                     >
                       <FileText className="w-4 h-4" />
                       <span>Open Brochure in New Tab</span>
@@ -586,8 +551,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                 </div>
               )}
             </div>
-          </motion.div>
-        </AnimatePresence>
+          </div>
 
         {/* Bottom CTA Banner */}
         <div className="mt-14 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 sm:p-10 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-6">
@@ -609,7 +573,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
             </button>
             <button
               onClick={onContactClick}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold tracking-wide transition-colors shadow-sm"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white text-sm font-bold tracking-wide transition-colors shadow-sm cursor-pointer"
             >
               Send Project Inquiry
             </button>
@@ -626,21 +590,16 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
           <div className="flex items-center gap-6 text-slate-400">
             <span>{WEBSITE_CONTENT.brand.phone}</span>
             <span>{WEBSITE_CONTENT.brand.enquiryEmail}</span>
-            <span>{WEBSITE_CONTENT.brand.hours}</span>
           </div>
         </div>
       </footer>
 
       {/* Lightbox Modal */}
-      <AnimatePresence>
-        {lightboxIndex !== null && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setLightboxIndex(null)}
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-8"
-          >
+      {lightboxIndex !== null && (
+        <div
+          onClick={() => setLightboxIndex(null)}
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-8"
+        >
             <div
               onClick={(e) => e.stopPropagation()}
               className="relative max-w-5xl w-full bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col max-h-[90vh]"
@@ -685,7 +644,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         CREDENTIAL_RENDER_GALLERY.length
                     );
                   }}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-blue-600 text-white flex items-center justify-center transition-colors cursor-pointer shadow-lg"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 hover:bg-black border border-neutral-700 text-white flex items-center justify-center transition-colors cursor-pointer shadow-lg"
                   title="Previous image"
                 >
                   <ChevronLeft className="w-6 h-6" />
@@ -697,7 +656,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                       (lightboxIndex + 1) % CREDENTIAL_RENDER_GALLERY.length
                     );
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-blue-600 text-white flex items-center justify-center transition-colors cursor-pointer shadow-lg"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 hover:bg-black border border-neutral-700 text-white flex items-center justify-center transition-colors cursor-pointer shadow-lg"
                   title="Next image"
                 >
                   <ChevronRight className="w-6 h-6" />
@@ -720,9 +679,8 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                 </a>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </div>
   );
 };

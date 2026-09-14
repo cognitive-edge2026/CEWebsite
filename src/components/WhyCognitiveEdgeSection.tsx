@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "motion/react";
 import {
   Zap,
   TrendingDown,
@@ -18,11 +17,7 @@ export const WhyCognitiveEdgeSection: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-2">
@@ -38,17 +33,13 @@ export const WhyCognitiveEdgeSection: React.FC = () => {
           <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300">
             Backed by proven empirical metrics from high-stakes residential and commercial developments. Here is how our spatial computing pipeline transforms bottom-line project economics.
           </p>
-        </motion.div>
+        </div>
 
         {/* 3 Core Metrics Taken Directly From The Flyer */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {/* Metric 1: 30% Faster Sales */}
-          <motion.div
+          <div
             id="metric-card-faster-sales"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.55, delay: 0, ease: [0.22, 1, 0.36, 1] }}
             className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-blue-100 dark:border-blue-900/60 shadow-md hover:shadow-xl transition-all relative overflow-hidden flex flex-col justify-between group"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 dark:bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -78,20 +69,11 @@ export const WhyCognitiveEdgeSection: React.FC = () => {
                 Reducing the lead-to-close cycle. Interactive digital models enable buyers to experience and fall in love with spaces months before drywall is installed.
               </p>
             </div>
-
-            <div className="mt-8 pt-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
-              <span>Metric Source: External Flyer</span>
-              <span className="text-blue-600 dark:text-cyan-400 font-bold">Verified KPI</span>
-            </div>
-          </motion.div>
+          </div>
 
           {/* Metric 2: 25% Cost Savings */}
-          <motion.div
+          <div
             id="metric-card-cost-savings"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-orange-100 dark:border-orange-900/60 shadow-md hover:shadow-xl transition-all relative overflow-hidden flex flex-col justify-between group"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 dark:bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -121,20 +103,11 @@ export const WhyCognitiveEdgeSection: React.FC = () => {
                 Increasing operational efficiency. Catching layout conflicts and material revisions in the digital twin prototype phase prevents costly on-site change orders.
               </p>
             </div>
-
-            <div className="mt-8 pt-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
-              <span>Metric Source: External Flyer</span>
-              <span className="text-orange-500 dark:text-orange-400 font-bold">Verified KPI</span>
-            </div>
-          </motion.div>
+          </div>
 
           {/* Metric 3: 45% Faster Approvals */}
-          <motion.div
+          <div
             id="metric-card-faster-approvals"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.55, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-emerald-100 dark:border-emerald-900/60 shadow-md hover:shadow-xl transition-all relative overflow-hidden flex flex-col justify-between group"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 dark:bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -164,22 +137,13 @@ export const WhyCognitiveEdgeSection: React.FC = () => {
                 45% faster approvals that lead directly to earlier delivery of the project. Stakeholders, city boards, and buyers review interactive models without ambiguity.
               </p>
             </div>
-
-            <div className="mt-8 pt-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
-              <span>Metric Source: External Flyer</span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold">Verified KPI</span>
-            </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Builder KPIs & Customer Metrics Breakdown (From Flyer) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Builder KPIs Box */}
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="bg-white dark:bg-slate-900 rounded-3xl p-7 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm"
           >
             <div className="flex items-center gap-3 mb-6">
@@ -237,14 +201,10 @@ export const WhyCognitiveEdgeSection: React.FC = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* The Customer Metrics Box */}
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="bg-white dark:bg-slate-900 rounded-3xl p-7 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm"
           >
             <div className="flex items-center gap-3 mb-6">
@@ -298,7 +258,7 @@ export const WhyCognitiveEdgeSection: React.FC = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

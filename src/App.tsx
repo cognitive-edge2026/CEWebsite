@@ -5,6 +5,7 @@ import { AboutSection } from "./components/AboutSection";
 import { ServicesSection } from "./components/ServicesSection";
 import { CredentialsSection } from "./components/CredentialsSection";
 import { WhyCognitiveEdgeSection } from "./components/WhyCognitiveEdgeSection";
+import { VirtualTourSection } from "./components/VirtualTourSection";
 import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
 import { CredentialsPage } from "./pages/CredentialsPage";
@@ -41,7 +42,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-colors"
+              className="px-5 py-2.5 bg-black hover:bg-neutral-900 border border-neutral-700 text-white font-semibold rounded-xl text-sm transition-colors cursor-pointer"
             >
               Reload Page
             </button>
@@ -196,25 +197,10 @@ export function App() {
     );
   }
 
-  // Render dedicated Credentials Page if user requested
-  if (currentPage === "credentials") {
-    return (
-      <ErrorBoundary>
-        <CredentialsPage
-          initialOption={credentialsOption}
-          onBackToHome={() => navigateToHome()}
-          onContactClick={() => navigateToHome("contact")}
-          darkMode={darkMode}
-          onToggleDarkMode={toggleDarkMode}
-        />
-      </ErrorBoundary>
-    );
-  }
-
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans">
-        {/* Navigation Header */}
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans flex flex-col">
+        {/* Navigation Header - Persistently visible irrespective of wherever the user is in */}
         <Header
           darkMode={darkMode}
           onToggleDarkMode={toggleDarkMode}
@@ -228,31 +214,49 @@ export function App() {
           }}
         />
 
-        {/* Main Content Sections */}
-        <main className="relative">
-          {/* 1. Hero Section */}
-          <Hero />
+        {/* Dynamic View: Dedicated Credentials Page or Full Home Experience */}
+        {currentPage === "credentials" ? (
+          <div className="pt-24 sm:pt-28 lg:pt-20 flex-1">
+            <CredentialsPage
+              initialOption={credentialsOption}
+              onBackToHome={() => navigateToHome()}
+              onContactClick={() => navigateToHome("contact")}
+              darkMode={darkMode}
+              onToggleDarkMode={toggleDarkMode}
+            />
+          </div>
+        ) : (
+          <>
+            {/* Main Content Sections */}
+            <main className="relative pt-24 sm:pt-28 lg:pt-20 flex-1">
+              {/* 1. Hero Section */}
+              <Hero />
 
-          {/* 2. About Us, Our Approach, Why It Works, How We Collaborate */}
-          <AboutSection />
+              {/* 2. About Us, Our Approach, Why It Works, How We Collaborate */}
+              <AboutSection />
 
-          {/* 3. Our Services */}
-          <ServicesSection onSelectService={handleSelectService} />
+              {/* 3. Our Services */}
+              <ServicesSection onSelectService={handleSelectService} />
 
-          {/* 4. Our Credentials Section with Dropdown menu that loads on new page */}
-          <CredentialsSection
-            onOpenCredentialsPage={(opt) => navigateToCredentials(opt)}
-          />
+              {/* 4. 360-degree virtual tour (Interactive 3D Digital Twin Demo) */}
+              <VirtualTourSection />
 
-          {/* 5. Why Cognitive Edge (3 Metrics from Flyer + Builder/Customer KPIs) */}
-          <WhyCognitiveEdgeSection />
+              {/* 5. Our Credentials Section with Dropdown menu that loads on new page */}
+              <CredentialsSection
+                onOpenCredentialsPage={(opt) => navigateToCredentials(opt)}
+              />
 
-          {/* 6. Contact Us Section (Name, Company, All USA States & Cities Dropdown) */}
-          <ContactSection prefilledService={selectedService} />
-        </main>
+              {/* 6. Why Cognitive Edge (3 Metrics from Flyer + Builder/Customer KPIs) */}
+              <WhyCognitiveEdgeSection />
 
-        {/* Footer */}
-        <Footer onOpenCredentialsPage={() => navigateToCredentials()} />
+              {/* 7. Contact Us Section (Name, Company, All USA States & Cities Dropdown) */}
+              <ContactSection prefilledService={selectedService} />
+            </main>
+
+            {/* Footer */}
+            <Footer onOpenCredentialsPage={() => navigateToCredentials()} />
+          </>
+        )}
       </div>
     </ErrorBoundary>
   );

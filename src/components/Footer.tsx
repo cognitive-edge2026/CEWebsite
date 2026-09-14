@@ -80,6 +80,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCredentialsPage }) => {
                 </a>
               </li>
               <li>
+                <a href="#virtual-tour" className="hover:text-blue-400 transition-colors">
+                  360-Degree Virtual Tour
+                </a>
+              </li>
+              <li>
                 <a
                   href="/credentials"
                   onClick={(e) => {
@@ -151,7 +156,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCredentialsPage }) => {
             <span>Intelligence Beyond Reality</span>
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-1.5 p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black hover:bg-neutral-900 border border-neutral-700 text-white transition-colors cursor-pointer"
               title="Back to Top"
             >
               <span>Back to Top</span>

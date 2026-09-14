@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import { motion } from "motion/react";
 import {
   Mail,
   Phone,
@@ -147,11 +146,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-2">
@@ -167,15 +162,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
           <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300">
             Ready to experience your building plans in interactive 3D virtual reality? Connect with our spatial computing team today.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* Left Column: Direct Info Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="lg:col-span-5 flex flex-col justify-between space-y-6"
           >
             <div>
@@ -237,28 +228,28 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                     <p className="text-base font-bold text-slate-900 dark:text-white mt-0.5 uppercase">
                       {WEBSITE_CONTENT.brand.enquiryEmail}
                     </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Alternative: {WEBSITE_CONTENT.brand.altEmail}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                      Alternative:{" "}
+                      <span className="font-semibold text-slate-700 dark:text-slate-300 lowercase">
+                        {WEBSITE_CONTENT.brand.altEmail}
+                      </span>
+                    </p>
                   </div>
                 </a>
               </div>
             </div>
 
-            {/* Geographic Coverage */}
-            <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-900/90 to-slate-900 text-white flex items-center gap-3">
-              <MapPin className="w-6 h-6 text-cyan-400 shrink-0" />
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-cyan-300">USA Nationwide Coverage</p>
-                <p className="text-xs text-slate-300 mt-0.5">Providing digital twin visualization across all 50 US States</p>
-              </div>
+            {/* Brand Motto */}
+            <div className="p-5 rounded-2xl bg-black text-white border border-neutral-800 flex items-center gap-3.5 shadow-md">
+              <Sparkles className="w-5 h-5 text-amber-400 shrink-0" />
+              <p className="text-sm sm:text-base font-semibold text-white tracking-wide">
+                Across all 50 states, we turn every experience into your competitive advantage
+              </p>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Column: Contact Form with Name, Company Name, State, City dropdowns */}
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="lg:col-span-7"
           >
             <div className="bg-slate-50 dark:bg-slate-950/80 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-lg">
@@ -526,11 +517,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                   type="submit"
                   id="contact-submit-btn"
                   disabled={status === "submitting"}
-                  className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 active:scale-[0.99] text-white font-bold text-base shadow-md hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
+                  className="w-full py-4 px-6 rounded-2xl bg-black hover:bg-neutral-900 active:bg-black active:scale-[0.99] text-white font-bold text-base shadow-md hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 border border-neutral-800"
                 >
                   {status === "submitting" ? (
                     <span className="flex items-center gap-2">
-                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full" />
                       <span>Sending...</span>
                     </span>
                   ) : (
@@ -542,7 +533,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                 </button>
               </form>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

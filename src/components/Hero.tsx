@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "motion/react";
 import { ArrowRight, Box, Zap, Shield, CheckCircle, Eye, Layers } from "lucide-react";
 import { WEBSITE_CONTENT } from "../data/websiteContent";
 
@@ -16,12 +15,7 @@ export const Hero: React.FC = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Headline, Tagline, & CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-7 flex flex-col items-start text-left"
-          >
+          <div className="lg:col-span-7 flex flex-col items-start text-left">
             {/* Top Technology Badge */}
             <div
               id="hero-spatial-badge"
@@ -29,7 +23,7 @@ export const Hero: React.FC = () => {
             >
               <Box className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
               <span>Spatial Computing & Digital Twins</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             </div>
 
             {/* Main Headline */}
@@ -62,7 +56,7 @@ export const Hero: React.FC = () => {
               <a
                 href="#services"
                 id="hero-explore-services-btn"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-black hover:bg-neutral-900 active:bg-neutral-800 text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg dark:bg-black dark:border dark:border-neutral-700 transition-all cursor-pointer"
               >
                 <span>Explore Our Services</span>
                 <ArrowRight className="w-4 h-4" />
@@ -71,7 +65,7 @@ export const Hero: React.FC = () => {
               <a
                 href="#contact"
                 id="hero-contact-now-btn"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700/50 shadow-sm transition-all cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-black hover:bg-neutral-900 text-white font-semibold text-sm border border-neutral-700 shadow-sm transition-all cursor-pointer"
               >
                 <span>Contact Now</span>
               </a>
@@ -92,15 +86,10 @@ export const Hero: React.FC = () => {
                 <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Faster Approvals</p>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Column: Holographic 3D Digital Twin Visual Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-5 relative"
-          >
+          <div className="lg:col-span-5 relative">
             <div className="relative rounded-2xl p-1 bg-gradient-to-br from-blue-500/20 via-slate-200/40 to-orange-500/20 dark:from-blue-500/30 dark:via-slate-800/50 dark:to-orange-500/30 shadow-2xl backdrop-blur-xs">
               <div className="relative rounded-[14px] overflow-hidden bg-slate-900 border border-slate-700/60 p-5 text-white">
                 {/* Hologram Display Screen Mockup */}
@@ -108,7 +97,7 @@ export const Hero: React.FC = () => {
                   {/* Top Status Bar */}
                   <div className="flex items-center justify-between z-10">
                     <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
                       <span className="text-[11px] font-mono font-semibold tracking-wider text-blue-300 uppercase">
                         Digital Twin Matrix: Active
                       </span>
@@ -215,7 +204,7 @@ export const Hero: React.FC = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

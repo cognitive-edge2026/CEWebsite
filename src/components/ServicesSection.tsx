@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from "motion/react";
 import {
   Layers,
   Glasses,
@@ -41,11 +40,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        <div
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-2">
@@ -61,7 +56,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
           <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300">
             End-to-end spatial computing, digital twins, and virtual reality workflows designed specifically for modern developers, builders, architects, and interior designers.
           </p>
-        </motion.div>
+        </div>
 
         {/* Services Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-7">
@@ -69,14 +64,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
             const Icon = serviceIcons[service.id] || Layers;
 
             return (
-              <motion.div
+              <div
                 key={service.id}
                 id={`service-card-${service.id}`}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.6, delay: (index % 4) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="bg-slate-50 dark:bg-slate-950/70 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group"
+                className="bg-slate-50 dark:bg-slate-950/70 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-md flex flex-col group"
               >
                 {/* Visual Imagery with High Quality Architectural Representation */}
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
@@ -87,16 +78,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                       // Fallback to local high-res construction visual if an image fails to load
                       (e.target as HTMLImageElement).src = "/construction_bim_vis.jpg";
                     }}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
 
-                  {/* Service Badge & Category */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-1">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white backdrop-blur-md shadow-xs border border-white/40 truncate max-w-[55%]">
-                      {service.category}
-                    </span>
+                  {/* Service Badge */}
+                  <div className="absolute top-3 right-3 flex items-center justify-end">
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-600/90 text-white backdrop-blur-md shrink-0">
                       {service.badge}
                     </span>
@@ -151,7 +139,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                     </button>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -159,7 +147,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
         {/* Interactive Feature Modal / Detail Dialog */}
         {activePreview && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative">
               {(() => {
                 const service = WEBSITE_CONTENT.services.find((s) => s.id === activePreview);
                 if (!service) return null;
@@ -226,7 +214,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                           onSelectService(service.title);
                           setActivePreview(null);
                         }}
-                        className="px-5 py-2 text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md"
+                        className="px-5 py-2 text-sm font-bold bg-black hover:bg-neutral-900 text-white rounded-xl shadow-md dark:bg-black dark:border dark:border-neutral-700 cursor-pointer"
                       >
                         Request Consultation
                       </a>

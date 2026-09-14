@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "motion/react";
 import {
   ChevronRight,
   Compass,
@@ -29,11 +28,7 @@ export const AboutSection: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             {/* Left Image Showcase (Matching Screenshot 44 - VR Headset In Park with Floating Holographic Luxury Villa) */}
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            <div
               className="lg:col-span-5"
             >
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700 group bg-slate-950">
@@ -42,7 +37,7 @@ export const AboutSection: React.FC = () => {
                   <img
                     src={vrForestSpatialImg}
                     alt="Cognitive Edge VR spatial digital twin visualization experience"
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover object-center"
                     referrerPolicy="no-referrer"
                   />
 
@@ -53,14 +48,10 @@ export const AboutSection: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Right Text Content (Verbatim from Screenshot 44) */}
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.65, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            <div
               className="lg:col-span-7 flex flex-col"
             >
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-3">
@@ -93,32 +84,32 @@ export const AboutSection: React.FC = () => {
               <div className="flex flex-wrap gap-3 pt-2">
                 <a
                   href="#approach"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-cyan-400 font-semibold text-sm hover:bg-blue-100 dark:hover:bg-slate-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white font-semibold text-sm transition-colors cursor-pointer"
                 >
-                  <Compass className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                  <Compass className="w-4 h-4 text-slate-300" />
                   <span>Our Approach</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </a>
 
                 <a
                   href="#why-it-works"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-cyan-400 font-semibold text-sm hover:bg-blue-100 dark:hover:bg-slate-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white font-semibold text-sm transition-colors cursor-pointer"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   <span>Why It Works</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </a>
 
                 <a
                   href="#collaboration"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-cyan-400 font-semibold text-sm hover:bg-blue-100 dark:hover:bg-slate-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white font-semibold text-sm transition-colors cursor-pointer"
                 >
-                  <Users2 className="w-4 h-4 text-orange-500" />
+                  <Users2 className="w-4 h-4 text-amber-400" />
                   <span>How We Collaborate</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </a>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -129,11 +120,7 @@ export const AboutSection: React.FC = () => {
         className="py-16 md:py-20 bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800/80 transition-colors"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="text-center max-w-3xl mx-auto mb-12"
           >
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-2">
@@ -146,7 +133,7 @@ export const AboutSection: React.FC = () => {
             <p className="mt-3 text-slate-600 dark:text-slate-400 text-base">
               A systematic engineering methodology designed to maximize project clarity, minimize construction risks, and deliver measurable ROI.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {WEBSITE_CONTENT.approach.map((item, index) => {
@@ -160,14 +147,10 @@ export const AboutSection: React.FC = () => {
               const pillClass = bgPill[index % bgPill.length] || bgPill[0];
 
               return (
-                <motion.div
+                <div
                   key={item.title}
                   id={`approach-card-${index + 1}`}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  className="bg-white dark:bg-slate-900 rounded-2xl p-7 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                  className="bg-white dark:bg-slate-900 rounded-2xl p-7 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-5">
@@ -192,7 +175,7 @@ export const AboutSection: React.FC = () => {
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Applied to 100% of projects</span>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -205,11 +188,7 @@ export const AboutSection: React.FC = () => {
         className="py-16 md:py-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="text-center max-w-3xl mx-auto mb-12"
           >
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-2">
@@ -222,7 +201,7 @@ export const AboutSection: React.FC = () => {
             <p className="mt-3 text-slate-600 dark:text-slate-400 text-base">
               Clear visual communication transforms complex architectural drawings into tangible experiences everyone can evaluate with precision.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {WEBSITE_CONTENT.whyItWorks.map((item, index) => {
@@ -237,14 +216,10 @@ export const AboutSection: React.FC = () => {
               const accentStyles = accentStylesList[index % accentStylesList.length] || accentStylesList[0];
 
               return (
-                <motion.div
+                <div
                   key={item.title}
                   id={`why-works-card-${index + 1}`}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  className="bg-slate-50 dark:bg-slate-950/60 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500/50 dark:hover:border-blue-500/50 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
+                  className="bg-slate-50 dark:bg-slate-950/60 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between"
                 >
                   <div>
                     <div className={`w-12 h-12 rounded-xl ${accentStyles.bg} flex items-center justify-center mb-5`}>
@@ -259,12 +234,7 @@ export const AboutSection: React.FC = () => {
                       {item.description}
                     </p>
                   </div>
-
-                  <div className="mt-6 pt-4 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-                    <span className="font-semibold text-blue-600 dark:text-blue-400">Outcome:</span>
-                    <span>Verified Milestone</span>
-                  </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -277,11 +247,7 @@ export const AboutSection: React.FC = () => {
         className="py-16 md:py-20 bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800/80 transition-colors"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="text-center max-w-3xl mx-auto mb-14"
           >
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-2">
@@ -294,7 +260,7 @@ export const AboutSection: React.FC = () => {
             <p className="mt-3 text-slate-600 dark:text-slate-400 text-base">
               A transparent, 4-phase agile collaboration pipeline ensuring frictionless alignment from blueprint intake to final interactive delivery.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
             {WEBSITE_CONTENT.collaborationSteps.map((step, index) => {
@@ -302,18 +268,14 @@ export const AboutSection: React.FC = () => {
               const StepIcon = stepIcons[index % stepIcons.length] || Search;
 
               return (
-                <motion.div
+                <div
                   key={step.title}
                   id={`collaboration-step-${step.step}`}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative bg-white dark:bg-slate-900 rounded-2xl p-7 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between group"
+                  className="relative bg-white dark:bg-slate-900 rounded-2xl p-7 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between group"
                 >
                   {/* Step index badge */}
                   <div className="flex items-center justify-between mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 text-white flex items-center justify-center font-bold text-lg shadow-md group-hover:scale-110 transition-transform">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 text-white flex items-center justify-center font-bold text-lg shadow-md">
                       <StepIcon className="w-6 h-6" />
                     </div>
                     <span className="text-2xl font-black text-slate-300 dark:text-slate-700">
@@ -334,9 +296,8 @@ export const AboutSection: React.FC = () => {
                     <span className="font-mono uppercase tracking-wider text-[11px] text-blue-600 dark:text-cyan-400 font-semibold">
                       Phase 0{step.step}
                     </span>
-                    <span className="text-slate-400">Active Feedback</span>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
