@@ -84,27 +84,27 @@ export const AboutSection: React.FC = () => {
               <div className="flex flex-wrap gap-3 pt-2">
                 <a
                   href="#approach"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white font-semibold text-sm transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-colors cursor-pointer shadow-xs"
                 >
-                  <Compass className="w-4 h-4 text-slate-300" />
+                  <Compass className="w-4 h-4 text-blue-200" />
                   <span>Our Approach</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </a>
 
                 <a
                   href="#why-it-works"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white font-semibold text-sm transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-colors cursor-pointer shadow-xs"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-300" />
                   <span>Why It Works</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </a>
 
                 <a
                   href="#collaboration"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white font-semibold text-sm transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-colors cursor-pointer shadow-xs"
                 >
-                  <Users2 className="w-4 h-4 text-amber-400" />
+                  <Users2 className="w-4 h-4 text-amber-300" />
                   <span>How We Collaborate</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </a>

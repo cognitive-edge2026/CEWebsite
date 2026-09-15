@@ -156,7 +156,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCredentialsPage }) => {
             <span>Intelligence Beyond Reality</span>
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black hover:bg-neutral-900 border border-neutral-700 text-white transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors cursor-pointer shadow-xs"
               title="Back to Top"
             >
               <span>Back to Top</span>

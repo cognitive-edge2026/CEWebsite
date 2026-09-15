@@ -108,7 +108,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
 
           <button
             onClick={onContactClick}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black hover:bg-neutral-900 border border-neutral-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer"
           >
             Inquire About This Service
           </button>
@@ -172,8 +172,8 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                     onClick={() => setSelectedOptionId(opt.id)}
                     className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                       isActive
-                        ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
-                        : "bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                        ? "bg-blue-600 text-white shadow-xs"
+                        : "bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-cyan-400"
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -209,7 +209,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         Responsive 16:9 Player
                       </span>
                       <a
-                        href="https://www.youtube.com/watch?v=yOveJiPjfQ4"
+                        href="https://youtu.be/-XqNyhx301U"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
@@ -225,7 +225,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                   <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 bg-slate-950">
                     <iframe
                       id="vr-walkthrough-video-embed"
-                      src={currentOption.videoUrl || "https://www.youtube.com/embed/yOveJiPjfQ4"}
+                      src={currentOption.videoUrl || "https://www.youtube.com/embed/-XqNyhx301U"}
                       className="w-full h-full border-0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
@@ -340,7 +340,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         onClick={() => setRenderFilter("all")}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           renderFilter === "all"
-                            ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
+                            ? "bg-blue-600 text-white shadow-xs"
                             : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                         }`}
                       >
@@ -351,7 +351,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         onClick={() => setRenderFilter("credentials")}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           renderFilter === "credentials"
-                            ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
+                            ? "bg-blue-600 text-white shadow-xs"
                             : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                         }`}
                       >
@@ -362,7 +362,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         onClick={() => setRenderFilter("renders")}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           renderFilter === "renders"
-                            ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
+                            ? "bg-blue-600 text-white shadow-xs"
                             : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                         }`}
                       >
@@ -397,7 +397,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         href="https://lh3.googleusercontent.com/d/1UedSm-xJlTffPnZBI7aart40ioi7mEbW"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white text-xs font-bold transition-colors shrink-0 shadow-xs cursor-pointer"
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shrink-0 shadow-xs cursor-pointer"
                       >
                         <span>View Master Render</span>
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -493,7 +493,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                       <button
                         type="button"
                         onClick={() => setBrochureRotation((prev) => (prev + 90) % 360)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-800 hover:bg-black hover:text-white text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 hover:text-white text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
                         title="Rotate preview 90 degrees"
                       >
                         <RotateCw className="w-3.5 h-3.5" />
@@ -541,7 +541,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                       href={`/brochure-viewer?rotate=${brochureRotation || 90}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm bg-black hover:bg-neutral-900 border border-neutral-700 text-white transition-all shadow-md shrink-0 cursor-pointer group"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md shrink-0 cursor-pointer group"
                     >
                       <FileText className="w-4 h-4" />
                       <span>Open Brochure in New Tab</span>
@@ -573,7 +573,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
             </button>
             <button
               onClick={onContactClick}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-black hover:bg-neutral-900 border border-neutral-700 text-white text-sm font-bold tracking-wide transition-colors shadow-sm cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold tracking-wide transition-colors shadow-sm cursor-pointer"
             >
               Send Project Inquiry
             </button>

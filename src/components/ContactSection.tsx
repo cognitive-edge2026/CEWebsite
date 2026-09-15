@@ -240,8 +240,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
             </div>
 
             {/* Brand Motto */}
-            <div className="p-5 rounded-2xl bg-black text-white border border-neutral-800 flex items-center gap-3.5 shadow-md">
-              <Sparkles className="w-5 h-5 text-amber-400 shrink-0" />
+            <div className="p-5 rounded-2xl bg-blue-600 text-white shadow-md flex items-center gap-3.5">
+              <Sparkles className="w-5 h-5 text-amber-300 shrink-0" />
               <p className="text-sm sm:text-base font-semibold text-white tracking-wide">
                 Across all 50 states, we turn every experience into your competitive advantage
               </p>
@@ -517,7 +517,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                   type="submit"
                   id="contact-submit-btn"
                   disabled={status === "submitting"}
-                  className="w-full py-4 px-6 rounded-2xl bg-black hover:bg-neutral-900 active:bg-black active:scale-[0.99] text-white font-bold text-base shadow-md hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 border border-neutral-800"
+                  className="w-full py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:scale-[0.99] text-white font-bold text-base shadow-md hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
                 >
                   {status === "submitting" ? (
                     <span className="flex items-center gap-2">

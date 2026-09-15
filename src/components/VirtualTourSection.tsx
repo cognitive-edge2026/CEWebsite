@@ -101,7 +101,7 @@ export const VirtualTourSection: React.FC = () => {
                   href={tourUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-lg bg-black hover:bg-neutral-900 border border-neutral-700 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
                   title="Open tour in new tab"
                 >
                   <span>Open in New Tab</span>

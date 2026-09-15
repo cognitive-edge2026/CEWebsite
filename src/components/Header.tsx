@@ -209,8 +209,8 @@ export const Header: React.FC<HeaderProps> = ({
                     id="nav-link-our-credentials"
                     className={`inline-flex items-center gap-1 text-[14px] font-semibold px-2 xl:px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                       isActive || credentialsDropdownOpen
-                        ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
-                        : "text-slate-700 hover:text-black hover:bg-slate-100 dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-800/80"
+                        ? "bg-blue-600 text-white shadow-xs"
+                        : "text-slate-700 hover:text-blue-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-slate-800/80"
                     }`}
                   >
                     <span>{link.label}</span>
@@ -237,11 +237,11 @@ export const Header: React.FC<HeaderProps> = ({
                               onClick={() => handleCredentialOptionSelect(opt.id)}
                               className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group/item cursor-pointer"
                             >
-                              <div className="w-7 h-7 rounded-lg bg-black text-white flex items-center justify-center shrink-0 group-hover/item:scale-105 transition-transform">
+                              <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 group-hover/item:scale-105 transition-transform">
                                 <SubIcon className="w-4 h-4" />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <div className="text-[14px] font-bold text-slate-800 dark:text-slate-200 group-hover/item:text-black dark:group-hover/item:text-white transition-colors">
+                                <div className="text-[14px] font-bold text-slate-800 dark:text-slate-200 group-hover/item:text-blue-600 dark:group-hover/item:text-cyan-400 transition-colors">
                                   {opt.label}
                                 </div>
                                 <div className="text-[11px] text-slate-400 dark:text-slate-500 truncate">
@@ -276,8 +276,8 @@ export const Header: React.FC<HeaderProps> = ({
                 id={`nav-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
                 className={`text-[14px] font-semibold px-2 xl:px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
-                    : "text-slate-700 hover:text-black hover:bg-slate-100 dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-800/80"
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "text-slate-700 hover:text-blue-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-slate-800/80"
                 }`}
               >
                 {link.label}
@@ -313,7 +313,7 @@ export const Header: React.FC<HeaderProps> = ({
               }
             }}
             id="header-contact-cta"
-            className="hidden sm:inline-flex items-center gap-1.5 text-[14px] font-bold px-4 py-2 rounded-xl bg-black hover:bg-neutral-900 active:bg-neutral-800 text-white dark:bg-black dark:border dark:border-neutral-700 shadow-xs hover:shadow transition-all cursor-pointer whitespace-nowrap"
+            className="hidden sm:inline-flex items-center gap-1.5 text-[14px] font-bold px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-xs hover:shadow transition-all cursor-pointer whitespace-nowrap"
           >
             <span>Contact Now</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -349,8 +349,8 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={(e) => handleNavClick(e, link)}
               className={`px-3 py-1 rounded-full whitespace-nowrap transition-colors shrink-0 text-[14px] font-semibold cursor-pointer ${
                 isActive
-                  ? "bg-black text-white shadow-xs dark:bg-black dark:border dark:border-neutral-700"
-                  : "bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-black dark:hover:text-white"
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-cyan-400"
               }`}
             >
               {link.label}
@@ -433,7 +433,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onNavigate?.("home", "contact");
                 }
               }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-black hover:bg-neutral-900 text-white font-bold text-sm shadow-md dark:bg-black dark:border dark:border-neutral-700"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm shadow-md"
             >
               <Phone className="w-4 h-4" />
               <span>Contact Our Team</span>

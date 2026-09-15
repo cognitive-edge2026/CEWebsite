@@ -35,7 +35,7 @@ export const CREDENTIAL_OPTIONS: CredentialOption[] = [
       "Fully interactive spatial digital twins allowing prospective home buyers, real estate investors, and architects to walk through unbuilt spaces in real-time 3D, customize interior materials on the fly, and experience spatial proportions with true-to-life depth.",
     badge: "Interactive Spatial 3D",
     iconName: "Glasses",
-    videoUrl: "https://www.youtube.com/embed/yOveJiPjfQ4",
+    videoUrl: "https://www.youtube.com/embed/-XqNyhx301U",
     primaryImage:
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80",
     secondaryImage:

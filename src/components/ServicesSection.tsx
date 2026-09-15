@@ -214,7 +214,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                           onSelectService(service.title);
                           setActivePreview(null);
                         }}
-                        className="px-5 py-2 text-sm font-bold bg-black hover:bg-neutral-900 text-white rounded-xl shadow-md dark:bg-black dark:border dark:border-neutral-700 cursor-pointer"
+                        className="px-5 py-2 text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md transition-colors cursor-pointer"
                       >
                         Request Consultation
                       </a>

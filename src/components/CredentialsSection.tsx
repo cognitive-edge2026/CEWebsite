@@ -100,18 +100,18 @@ export const CredentialsSection: React.FC<CredentialsSectionProps> = ({
                     key={cat.id}
                     id={`credentials-header-option-${cat.id}`}
                     onClick={() => handleOpenPage(cat.id)}
-                    className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-black dark:hover:border-white shadow-sm hover:shadow-lg transition-all duration-300 text-left cursor-pointer"
+                    className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 shadow-sm hover:shadow-lg transition-all duration-300 text-left cursor-pointer"
                   >
                     <div>
                       <div className="flex items-center justify-between gap-3 mb-4">
-                        <div className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center shrink-0 group-hover:bg-black group-hover:text-white transition-colors duration-300 shadow-2xs">
+                        <div className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-2xs">
                           <IconComp className="w-5 h-5" />
                         </div>
                         <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                           {cat.tag}
                         </span>
                       </div>
-                      <h4 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-black dark:group-hover:text-white transition-colors">
+                      <h4 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
                         {cat.label}
                       </h4>
                       <p className="mt-2.5 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -119,7 +119,7 @@ export const CredentialsSection: React.FC<CredentialsSectionProps> = ({
                       </p>
                     </div>
 
-                    <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-sm font-semibold text-slate-900 dark:text-white group-hover:text-black dark:group-hover:text-white">
+                    <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400">
                       <span>View Showcase</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />
                     </div>

@@ -122,7 +122,6 @@ export const WEBSITE_CONTENT = {
       highlights: [
         "1:1 scale blueprint to 3D translation",
         "Interactive spatial navigation & measurements",
-        "Multi-stakeholder cloud synchronized exploration",
       ],
       image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
     },
@@ -182,7 +181,6 @@ export const WEBSITE_CONTENT = {
       highlights: [
         "Optimized for iPad Pro, iOS, Android & mobile browsers",
         "Offline presentation mode for remote client pitches",
-        "Direct client follow-up sharing via link, SMS, or QR code",
       ],
       image: tabletMobileImg,
     },

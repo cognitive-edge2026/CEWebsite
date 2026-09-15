@@ -172,7 +172,7 @@ export const BrochureViewerPage: React.FC<BrochureViewerPageProps> = ({
             id="btn-viewer-rotate-cw"
             type="button"
             onClick={handleRotateClockwise}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-black hover:bg-neutral-900 border border-neutral-700 text-white shadow-sm transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all cursor-pointer"
             title="Rotate 90 degrees clockwise"
           >
             <RotateCw className="w-4 h-4" />
@@ -184,7 +184,7 @@ export const BrochureViewerPage: React.FC<BrochureViewerPageProps> = ({
             id="btn-viewer-rotate-ccw"
             type="button"
             onClick={handleRotateCounterClockwise}
-            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-medium bg-black hover:bg-neutral-900 border border-neutral-700 text-slate-200 hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-blue-600 border border-slate-700 text-slate-200 hover:text-white transition-colors cursor-pointer"
             title="Rotate 90 degrees counter-clockwise"
           >
             <RotateCcw className="w-4 h-4" />
@@ -196,7 +196,7 @@ export const BrochureViewerPage: React.FC<BrochureViewerPageProps> = ({
               id="btn-viewer-reset-rotation"
               type="button"
               onClick={handleResetRotation}
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-black hover:bg-neutral-900 border border-neutral-700 text-slate-200 hover:text-white transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-blue-600 border border-slate-700 text-slate-200 hover:text-white transition-colors cursor-pointer"
               title="Reset rotation to 0°"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -208,7 +208,7 @@ export const BrochureViewerPage: React.FC<BrochureViewerPageProps> = ({
           <button
             type="button"
             onClick={toggleFullscreen}
-            className="p-1.5 sm:p-2 rounded-lg bg-black hover:bg-neutral-900 border border-neutral-700 text-slate-200 hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-lg bg-slate-800 hover:bg-blue-600 border border-slate-700 text-slate-200 hover:text-white transition-colors cursor-pointer"
             title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -220,7 +220,7 @@ export const BrochureViewerPage: React.FC<BrochureViewerPageProps> = ({
             href={rawGoogleDriveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-black hover:bg-neutral-900 border border-neutral-700 text-slate-200 hover:text-white transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-colors cursor-pointer"
             title="Open original file directly in Google Drive"
           >
             <span className="hidden lg:inline">Google Drive</span>
