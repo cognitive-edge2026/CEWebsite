@@ -303,22 +303,6 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          {/* Contact Direct CTA Button */}
-          <a
-            href="#contact"
-            onClick={(e) => {
-              if (currentPage !== "home") {
-                e.preventDefault();
-                onNavigate?.("home", "contact");
-              }
-            }}
-            id="header-contact-cta"
-            className="hidden sm:inline-flex items-center gap-1.5 text-[14px] font-bold px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-xs hover:shadow transition-all cursor-pointer whitespace-nowrap"
-          >
-            <span>Contact Now</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </a>
-
           {/* Mobile Menu Toggle Button */}
           <button
             id="mobile-menu-toggle-btn"

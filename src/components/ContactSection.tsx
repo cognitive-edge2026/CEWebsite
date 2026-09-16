@@ -81,9 +81,16 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.state || !formData.city) {
+    if (!formData.name || !formData.email || !formData.phone || !formData.state || !formData.city) {
       setStatus("error");
-      setFeedbackMessage("Please enter your Name, Email, State, and City.");
+      setFeedbackMessage("Please enter your Name, Email, Phone Number, State, and City.");
+      return;
+    }
+
+    const phoneDigits = formData.phone.replace(/\D/g, "");
+    if (phoneDigits.length < 10) {
+      setStatus("error");
+      setFeedbackMessage("Please enter a valid 10-digit phone number.");
       return;
     }
 
@@ -409,11 +416,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                       htmlFor="contact-phone"
                       className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2"
                     >
-                      Phone Number
+                      Phone Number <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
                       id="contact-phone"
+                      required
                       autoComplete="tel"
                       value={formData.phone}
                       onChange={handlePhoneChange}

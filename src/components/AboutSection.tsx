@@ -170,11 +170,6 @@ export const AboutSection: React.FC = () => {
                       {item.description}
                     </p>
                   </div>
-
-                  <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-xs font-semibold text-blue-600 dark:text-cyan-400">
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Applied to 100% of projects</span>
-                  </div>
                 </div>
               );
             })}
@@ -290,12 +285,6 @@ export const AboutSection: React.FC = () => {
                     <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                       {step.description}
                     </p>
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
-                    <span className="font-mono uppercase tracking-wider text-[11px] text-blue-600 dark:text-cyan-400 font-semibold">
-                      Phase 0{step.step}
-                    </span>
                   </div>
                 </div>
               );
