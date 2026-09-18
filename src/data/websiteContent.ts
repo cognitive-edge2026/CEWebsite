@@ -106,7 +106,7 @@ export const WEBSITE_CONTENT = {
     {
       step: 4,
       title: "Deliver",
-      description: "We translate the approved design into efficient, cost-effective production.",
+      description: "We translate the approved design into efficient, cost-effective product.",
     },
   ],
 
@@ -122,6 +122,7 @@ export const WEBSITE_CONTENT = {
       highlights: [
         "1:1 scale blueprint to 3D translation",
         "Interactive spatial navigation & measurements",
+        "Accurate physical materiality & lighting simulations",
       ],
       image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
     },
@@ -132,7 +133,7 @@ export const WEBSITE_CONTENT = {
       badge: "Full Scale Immersion",
       subtitle: "Immerse yourself in stunning VR environments",
       description:
-        "Immerse yourself in stunning VR environments that bring your projects to life. Walk through spaces, customize layouts, and experience designs in full scale before construction begins, enabling better decision-making and enhanced client satisfaction.",
+        "Immerse yourself in stunning VR environments that bring your projects to life. Walk through spaces, customize layouts, and experience designs in full scale before construction begins, enabling better decision-making and client satisfaction.",
       highlights: [
         "Photorealistic lighting & materiality",
         "Real-time finish & layout switching",
@@ -151,7 +152,7 @@ export const WEBSITE_CONTENT = {
       highlights: [
         "Dynamic custom finishes & material palettes",
         "Furniture placement & spatial flow testing",
-        "Eliminate buyer hesitation with Try-Before-You-Buy",
+        "Try-before-you-buy spatial visualization",
       ],
       image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80",
     },
@@ -162,11 +163,11 @@ export const WEBSITE_CONTENT = {
       badge: "Multi-Touch Display",
       subtitle: "Engaging large-format touch displays for sales galleries and leasing centers",
       description:
-        "Transform your sales gallery or showroom into an interactive experience center. Large-format multi-touch kiosks empower prospective buyers to explore development masterplans, navigate unit floor plates, toggle finish packages, and inspect sunlight orientation in real time.",
+        "Transform your sales gallery or showroom into an interactive experience center. Large-format multi-touch kiosks empower prospective buyers to explore development masterplans, navigate unit floor plates, and inspect sunlight orientation in real time.",
       highlights: [
-        "Ultra-responsive 4K/8K multi-touch hardware integration",
-        "Real-time unit availability & inventory synchronization",
-        "Interactive masterplan navigation & unit selector",
+        "Ultra-responsive 4K multi-touch displays",
+        "Real-time unit availability & inventory sync",
+        "Interactive masterplan & unit selector",
       ],
       image: touchKioskImg,
     },
@@ -177,10 +178,11 @@ export const WEBSITE_CONTENT = {
       badge: "Cross-Platform Access",
       subtitle: "High-performance spatial presentation tools for brokers, agents, and buyers",
       description:
-        "Empower brokers, sales teams, and buyers with seamless tablet and mobile spatial apps. Showcase your entire development portfolio on iPads and smartphones with smooth 60 FPS real-time rendering, offline synchronization capabilities, and instant PDF/brochure sharing.",
+        "Empower brokers, sales teams, and buyers with seamless tablet and mobile spatial apps. Showcase your entire development portfolio on iPads and smartphones with smooth 60 FPS real-time rendering, offline synchronization, and instant sharing.",
       highlights: [
-        "Optimized for iPad Pro, iOS, Android & mobile browsers",
-        "Offline presentation mode for remote client pitches",
+        "Optimized for iPad Pro, iOS & Android devices",
+        "Offline presentation mode for client pitches",
+        "Interactive presentation made for the remote client",
       ],
       image: tabletMobileImg,
     },
@@ -191,11 +193,10 @@ export const WEBSITE_CONTENT = {
       badge: "Frictionless WebXR",
       subtitle: "Browser-accessible panoramic tours with zero app installation",
       description:
-        "Deliver frictionless, high-resolution panoramic walkthroughs that load instantly on any web browser or mobile device without apps or plugins. Features interactive hotspots, floor plan minimaps, embedded audio narration, and integrated lead capture forms.",
+        "Deliver frictionless, high-resolution panoramic walkthroughs that load instantly on any web browser or mobile device without apps or plugins. Features interactive hotspots, floor plan minimaps, embedded audio narration, and lead capture forms.",
       highlights: [
-        "Zero-installation WebGL/WebXR browser streaming",
-        "Interactive hotspot info-tags & architectural callouts",
-        "Google Street View & real estate MLS portal embed ready",
+        "Zero-installation WebGL/WebXR streaming",
+        "Interactive hotspot tags & callouts",
       ],
       image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
     },
@@ -206,11 +207,11 @@ export const WEBSITE_CONTENT = {
       badge: "Ultra 8K Stills",
       subtitle: "Photorealistic exterior and interior architectural CGI renderings",
       description:
-        "Produce breathtaking architectural CGI stills that communicate design intent with pristine clarity. We simulate exact geographical sun angles, atmospheric lighting conditions, physical material properties, and authentic landscaping to captivate buyers and review boards.",
+        "Produce breathtaking architectural CGI stills that communicate design intent with pristine clarity. We simulate exact geographical sun angles, atmospheric lighting conditions, physical material properties, and landscaping to captivate buyers.",
       highlights: [
-        "Accurate sun study simulations & twilight/dusk lighting",
-        "Ultra-high resolution suitable for billboards & luxury print",
-        "Physically based material shaders matching actual vendor specs",
+        "Accurate sun studies & twilight lighting",
+        "Ultra 8K resolution for billboard & print",
+        "Physically based shaders matching vendor specs",
       ],
       image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
     },
@@ -221,11 +222,11 @@ export const WEBSITE_CONTENT = {
       badge: "4D Construction Phasing",
       subtitle: "Bridge architectural schematics, construction sequencing, and MEP coordination",
       description:
-        "Translate complex BIM data, structural schematics, and construction milestone schedules into dynamic 4D visual simulations. Eliminate on-site clash errors, align contractor trades, and present clear progress milestones to investors, city councils, and project stakeholders.",
+        "Translate complex BIM data, structural schematics, and construction milestone schedules into dynamic 4D visual simulations. Eliminate on-site clash errors, align contractor trades, and present clear progress milestones to project stakeholders.",
       highlights: [
-        "4D timeline sequencing from groundbreaking to final handover",
+        "4D timeline sequencing to final handover",
         "BIM & MEP clash detection visual overlays",
-        "Investor-grade milestone presentations & logistic fly-throughs",
+        "Investor milestone presentations & fly-throughs",
       ],
       image: constructionBimImg,
     },

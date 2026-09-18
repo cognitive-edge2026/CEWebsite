@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   Users2,
   Sparkles,
-  Layers,
   Search,
   Eye,
   RefreshCw,
@@ -54,11 +53,6 @@ export const AboutSection: React.FC = () => {
             <div
               className="lg:col-span-7 flex flex-col"
             >
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-3">
-                <Layers className="w-4 h-4" />
-                <span>Who We Are</span>
-              </div>
-
               <h2
                 id="about-heading"
                 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-6"
@@ -123,10 +117,6 @@ export const AboutSection: React.FC = () => {
           <div
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-2">
-              <Compass className="w-4 h-4" />
-              <span>Core Methodology</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Our Approach
             </h2>
@@ -153,13 +143,10 @@ export const AboutSection: React.FC = () => {
                   className="bg-white dark:bg-slate-900 rounded-2xl p-7 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-5">
-                      <div className={`p-3 rounded-xl ${pillClass}`}>
+                    <div className="mb-5">
+                      <div className={`inline-flex p-3 rounded-xl ${pillClass}`}>
                         <Icon className="w-6 h-6" />
                       </div>
-                      <span className="text-xs font-mono font-bold text-slate-400 dark:text-slate-500">
-                        0{index + 1}
-                      </span>
                     </div>
 
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
@@ -186,10 +173,6 @@ export const AboutSection: React.FC = () => {
           <div
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-2">
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Proven Outcomes</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Why It Works
             </h2>
@@ -198,7 +181,7 @@ export const AboutSection: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 lg:gap-6 items-stretch">
             {WEBSITE_CONTENT.whyItWorks.map((item, index) => {
               const icons = [Clock, RefreshCw, TrendingDown, Award];
               const Icon = icons[index % icons.length] || Clock;
@@ -214,18 +197,18 @@ export const AboutSection: React.FC = () => {
                 <div
                   key={item.title}
                   id={`why-works-card-${index + 1}`}
-                  className="bg-slate-50 dark:bg-slate-950/60 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col justify-between"
+                  className="bg-slate-50 dark:bg-slate-950/60 rounded-2xl p-5 sm:p-6 lg:p-7 border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col h-full group"
                 >
-                  <div>
-                    <div className={`w-12 h-12 rounded-xl ${accentStyles.bg} flex items-center justify-center mb-5`}>
-                      <Icon className={`w-6 h-6 ${accentStyles.iconColor}`} />
-                    </div>
+                  <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl ${accentStyles.bg} flex items-center justify-center mb-5 shrink-0`}>
+                    <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${accentStyles.iconColor}`} />
+                  </div>
 
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                  <div className="flex-1 flex flex-col">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-2 min-h-[2rem] flex items-start group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
                       {item.title}
                     </h3>
 
-                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed flex-1">
                       {item.description}
                     </p>
                   </div>
@@ -245,10 +228,6 @@ export const AboutSection: React.FC = () => {
           <div
             className="text-center max-w-3xl mx-auto mb-14"
           >
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-2">
-              <Users2 className="w-4 h-4" />
-              <span>Execution Workflow</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               How We Collaborate
             </h2>
@@ -257,7 +236,7 @@ export const AboutSection: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 lg:gap-6 items-stretch relative">
             {WEBSITE_CONTENT.collaborationSteps.map((step, index) => {
               const stepIcons = [Search, Eye, RefreshCw, Send];
               const StepIcon = stepIcons[index % stepIcons.length] || Search;
@@ -266,20 +245,17 @@ export const AboutSection: React.FC = () => {
                 <div
                   key={step.title}
                   id={`collaboration-step-${step.step}`}
-                  className="relative bg-white dark:bg-slate-900 rounded-2xl p-7 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between group"
+                  className="relative bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 lg:p-7 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col h-full group"
                 >
-                  {/* Step index badge */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 text-white flex items-center justify-center font-bold text-lg shadow-md">
-                      <StepIcon className="w-6 h-6" />
+                  {/* Step Icon */}
+                  <div className="mb-5">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 text-white flex items-center justify-center font-bold text-base sm:text-lg shadow-md shrink-0">
+                      <StepIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    <span className="text-2xl font-black text-slate-300 dark:text-slate-700">
-                      0{step.step}
-                    </span>
                   </div>
 
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
+                  <div className="flex-1 flex flex-col">
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
                       {step.step}. {step.title}
                     </h3>
                     <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">

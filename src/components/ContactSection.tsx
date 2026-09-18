@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import {
   Mail,
   Phone,
@@ -10,6 +10,9 @@ import {
   User,
   Sparkles,
   Search,
+  ChevronDown,
+  X,
+  Check,
 } from "lucide-react";
 import { US_STATES, StateInfo } from "../data/usLocations";
 import { WEBSITE_CONTENT } from "../data/websiteContent";
@@ -34,12 +37,47 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
 
   const [stateSearch, setStateSearch] = useState("");
   const [citySearch, setCitySearch] = useState("");
-  const [customCityInput, setCustomCityInput] = useState(false);
+  const [isStateOpen, setIsStateOpen] = useState(false);
+  const [isCityOpen, setIsCityOpen] = useState(false);
+  const stateRef = useRef<HTMLDivElement>(null);
+  const cityRef = useRef<HTMLDivElement>(null);
+  const stateSearchInputRef = useRef<HTMLInputElement>(null);
+  const citySearchInputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [feedbackMessage, setFeedbackMessage] = useState("");
 
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (stateRef.current && !stateRef.current.contains(event.target as Node)) {
+        setIsStateOpen(false);
+      }
+      if (cityRef.current && !cityRef.current.contains(event.target as Node)) {
+        setIsCityOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Auto-focus search inputs when opened
+  useEffect(() => {
+    if (isStateOpen) {
+      setTimeout(() => stateSearchInputRef.current?.focus(), 50);
+    }
+  }, [isStateOpen]);
+
+  useEffect(() => {
+    if (isCityOpen) {
+      setTimeout(() => citySearchInputRef.current?.focus(), 50);
+    }
+  }, [isCityOpen]);
+
   // Update prefilled service if changed externally
-  React.useEffect(() => {
+  useEffect(() => {
     if (prefilledService) {
       setFormData((prev) => ({ ...prev, service: prefilledService }));
     }
@@ -50,12 +88,22 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
     return US_STATES.find((s) => s.name === formData.state || s.code === formData.state);
   }, [formData.state]);
 
+  // Filtered list of states based on search query
+  const filteredStates = useMemo(() => {
+    if (!stateSearch.trim()) return US_STATES;
+    const query = stateSearch.toLowerCase().trim();
+    return US_STATES.filter(
+      (s) => s.name.toLowerCase().includes(query) || s.code.toLowerCase().includes(query)
+    );
+  }, [stateSearch]);
+
   // Filtered list of cities based on chosen state
   const availableCities = useMemo(() => {
     if (!selectedStateObj) return [];
-    if (!citySearch) return selectedStateObj.cities;
+    if (!citySearch.trim()) return selectedStateObj.cities;
+    const query = citySearch.toLowerCase().trim();
     return selectedStateObj.cities.filter((c) =>
-      c.toLowerCase().includes(citySearch.toLowerCase())
+      c.toLowerCase().includes(query)
     );
   }, [selectedStateObj, citySearch]);
 
@@ -65,8 +113,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
       state: stateName,
       city: "", // reset city when state changes
     }));
+    setStateSearch("");
     setCitySearch("");
-    setCustomCityInput(false);
+    setIsStateOpen(false);
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,8 +184,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
         service: prefilledService || "Digital Twin Creation",
         message: "",
       });
+      setStateSearch("");
       setCitySearch("");
-      setCustomCityInput(false);
+      setIsStateOpen(false);
+      setIsCityOpen(false);
     } catch (err) {
       console.error("Submission error:", err);
       setStatus("error");
@@ -156,10 +207,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
         <div
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-2">
-            <Mail className="w-4 h-4" />
-            <span>Get in Touch</span>
-          </div>
           <h2
             id="contact-heading"
             className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight"
@@ -309,84 +356,274 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                   </div>
                 </div>
 
-                {/* Row 2: USA State & City Dropdowns */}
+                {/* Row 2: USA State & City Dropdowns with type-to-find input boxes */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   {/* USA State Dropdown */}
-                  <div>
+                  <div ref={stateRef} className="relative">
                     <label
                       htmlFor="contact-state"
                       className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2"
                     >
                       State (USA) <span className="text-red-500">*</span>
                     </label>
-                    <div className="relative">
-                      <select
-                        id="contact-state"
-                        required
-                        value={formData.state}
-                        onChange={(e) => handleStateChange(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-pointer"
+                    <button
+                      type="button"
+                      id="contact-state"
+                      onClick={() => {
+                        setIsStateOpen((prev) => !prev);
+                        setIsCityOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border text-left text-sm flex items-center justify-between transition-colors ${
+                        isStateOpen
+                          ? "border-blue-500 ring-2 ring-blue-500/20"
+                          : "border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600"
+                      }`}
+                    >
+                      <span
+                        className={`truncate ${
+                          formData.state
+                            ? "text-slate-900 dark:text-white font-medium"
+                            : "text-slate-400 dark:text-slate-500"
+                        }`}
                       >
-                        <option value="">-- Select a US State --</option>
-                        {US_STATES.map((state) => (
-                          <option key={state.code} value={state.name}>
-                            {state.name} ({state.code})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                        {formData.state
+                          ? `${formData.state} (${selectedStateObj?.code || ""})`
+                          : "-- Select or type to find state --"}
+                      </span>
+                      <div className="flex items-center gap-1.5 ml-2 shrink-0">
+                        {formData.state && (
+                          <span
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleStateChange("");
+                            }}
+                            className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                            title="Clear selection"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </span>
+                        )}
+                        <ChevronDown
+                          className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
+                            isStateOpen ? "rotate-180 text-blue-500" : ""
+                          }`}
+                        />
+                      </div>
+                    </button>
+
+                    {/* State Search & Select Popover */}
+                    {isStateOpen && (
+                      <div className="absolute z-50 left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+                        {/* Search Input Box */}
+                        <div className="p-2.5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60">
+                          <div className="relative">
+                            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                            <input
+                              ref={stateSearchInputRef}
+                              type="text"
+                              id="state-search-input"
+                              value={stateSearch}
+                              onChange={(e) => setStateSearch(e.target.value)}
+                              placeholder="Type to find state (e.g. CA or Texas)..."
+                              className="w-full pl-9 pr-8 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            {stateSearch && (
+                              <button
+                                type="button"
+                                onClick={() => setStateSearch("")}
+                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* States List */}
+                        <div className="max-h-56 overflow-y-auto p-1.5 space-y-0.5">
+                          {filteredStates.length > 0 ? (
+                            filteredStates.map((state) => {
+                              const isSelected = formData.state === state.name;
+                              return (
+                                <button
+                                  key={state.code}
+                                  type="button"
+                                  onClick={() => {
+                                    handleStateChange(state.name);
+                                    setIsStateOpen(false);
+                                    setStateSearch("");
+                                  }}
+                                  className={`w-full px-3 py-2 text-left rounded-lg text-sm flex items-center justify-between transition-colors ${
+                                    isSelected
+                                      ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-400 font-bold"
+                                      : "text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                                  }`}
+                                >
+                                  <span>{state.name}</span>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                      {state.code}
+                                    </span>
+                                    {isSelected && (
+                                      <Check className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                                    )}
+                                  </div>
+                                </button>
+                              );
+                            })
+                          ) : (
+                            <div className="p-4 text-center text-sm text-slate-400">
+                              No state matching "{stateSearch}"
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* USA City Dropdown */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <label
-                        htmlFor="contact-city"
-                        className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300"
+                  <div ref={cityRef} className="relative">
+                    <label
+                      htmlFor="contact-city"
+                      className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2"
+                    >
+                      City <span className="text-red-500">*</span>
+                    </label>
+                    <button
+                      type="button"
+                      id="contact-city"
+                      disabled={!formData.state}
+                      onClick={() => {
+                        if (!formData.state) return;
+                        setIsCityOpen((prev) => !prev);
+                        setIsStateOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border text-left text-sm flex items-center justify-between transition-colors ${
+                        !formData.state
+                          ? "opacity-60 bg-slate-100 dark:bg-slate-800 cursor-not-allowed border-slate-300 dark:border-slate-700"
+                          : isCityOpen
+                          ? "border-blue-500 ring-2 ring-blue-500/20 cursor-pointer"
+                          : "border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 cursor-pointer"
+                      }`}
+                    >
+                      <span
+                        className={`truncate ${
+                          formData.city
+                            ? "text-slate-900 dark:text-white font-medium"
+                            : "text-slate-400 dark:text-slate-500"
+                        }`}
                       >
-                        City <span className="text-red-500">*</span>
-                      </label>
-                      {formData.state && (
-                        <button
-                          type="button"
-                          onClick={() => setCustomCityInput(!customCityInput)}
-                          className="text-[11px] text-blue-600 dark:text-cyan-400 hover:underline cursor-pointer"
-                        >
-                          {customCityInput ? "Select from list" : "Type custom city"}
-                        </button>
-                      )}
-                    </div>
+                        {formData.city
+                          ? formData.city
+                          : formData.state
+                          ? `-- Select or type to find city in ${formData.state} --`
+                          : "First choose a state above"}
+                      </span>
+                      <div className="flex items-center gap-1.5 ml-2 shrink-0">
+                        {formData.city && (
+                          <span
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFormData((prev) => ({ ...prev, city: "" }));
+                            }}
+                            className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                            title="Clear city"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </span>
+                        )}
+                        <ChevronDown
+                          className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
+                            isCityOpen ? "rotate-180 text-blue-500" : ""
+                          }`}
+                        />
+                      </div>
+                    </button>
 
-                    {!customCityInput ? (
-                      <select
-                        id="contact-city"
-                        required
-                        disabled={!formData.state}
-                        value={formData.city}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-pointer disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:opacity-60"
-                      >
-                        <option value="">
-                          {formData.state
-                            ? `-- Select city in ${formData.state} --`
-                            : "First choose a state above"}
-                        </option>
-                        {availableCities.map((city, idx) => (
-                          <option key={`${city}-${idx}`} value={city}>
-                            {city}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <input
-                        type="text"
-                        id="contact-city-custom"
-                        required
-                        value={formData.city}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        placeholder={`Enter your city in ${formData.state}`}
-                        className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                      />
+                    {/* City Search & Select Popover */}
+                    {isCityOpen && formData.state && (
+                      <div className="absolute z-50 left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+                        {/* Search Input Box */}
+                        <div className="p-2.5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60">
+                          <div className="relative">
+                            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                            <input
+                              ref={citySearchInputRef}
+                              type="text"
+                              id="city-search-input"
+                              value={citySearch}
+                              onChange={(e) => setCitySearch(e.target.value)}
+                              placeholder={`Type to find city in ${formData.state}...`}
+                              className="w-full pl-9 pr-8 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            {citySearch && (
+                              <button
+                                type="button"
+                                onClick={() => setCitySearch("")}
+                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Cities List */}
+                        <div className="max-h-56 overflow-y-auto p-1.5 space-y-0.5">
+                          {/* Option to select the typed input as custom city */}
+                          {citySearch.trim() && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setFormData((prev) => ({ ...prev, city: citySearch.trim() }));
+                                setIsCityOpen(false);
+                                setCitySearch("");
+                              }}
+                              className="w-full px-3 py-2 text-left rounded-lg text-sm font-semibold text-blue-600 dark:text-cyan-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 flex items-center justify-between"
+                            >
+                              <span>Use "{citySearch.trim()}"</span>
+                              <span className="text-xs uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300">
+                                Custom
+                              </span>
+                            </button>
+                          )}
+
+                          {availableCities.length > 0 ? (
+                            availableCities.map((city, idx) => {
+                              const isSelected = formData.city === city;
+                              return (
+                                <button
+                                  key={`${city}-${idx}`}
+                                  type="button"
+                                  onClick={() => {
+                                    setFormData((prev) => ({ ...prev, city }));
+                                    setIsCityOpen(false);
+                                    setCitySearch("");
+                                  }}
+                                  className={`w-full px-3 py-2 text-left rounded-lg text-sm flex items-center justify-between transition-colors ${
+                                    isSelected
+                                      ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-400 font-bold"
+                                      : "text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                                  }`}
+                                >
+                                  <span>{city}</span>
+                                  {isSelected && (
+                                    <Check className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                                  )}
+                                </button>
+                              );
+                            })
+                          ) : !citySearch.trim() ? (
+                            <div className="p-4 text-center text-sm text-slate-400">
+                              No cities listed. Type your city in the search box above.
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>

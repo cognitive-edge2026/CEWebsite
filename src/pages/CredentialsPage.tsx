@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   Sun,
   Moon,
-  ShieldCheck,
   Play,
   ExternalLink,
   FileText,
@@ -117,10 +116,6 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
         {/* Page Hero Header */}
         <div className="mb-10 text-center sm:text-left sm:flex sm:items-end sm:justify-between gap-6 border-b border-slate-200 dark:border-slate-800 pb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-cyan-300 border border-blue-200/60 dark:border-blue-900/60 mb-3">
-              <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
-              <span>Verified Deliverables & Work Showcase</span>
-            </div>
             <h1
               id="credentials-page-title"
               className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight"
@@ -205,9 +200,6 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                       </h3>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                        Responsive 16:9 Player
-                      </span>
                       <a
                         href="https://youtu.be/-XqNyhx301U"
                         target="_blank"
@@ -250,9 +242,6 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                         Architectural Fly-Through & Cinematic Reels
                       </h3>
                     </div>
-                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 self-start sm:self-auto">
-                      Responsive 16:9 Players
-                    </span>
                   </div>
 
                   {/* Showcase Video 01 */}
@@ -321,10 +310,6 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                   {/* Top Header & Filter Controls */}
                   <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
                     <div>
-                      <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-1.5">
-                        <Sparkles className="w-4 h-4" />
-                        <span>Ray-Traced Precision & Physical Materials</span>
-                      </div>
                       <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
                         3D Architectural Renders & Credentials Portfolio
                       </h3>

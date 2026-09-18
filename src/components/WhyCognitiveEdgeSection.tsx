@@ -20,10 +20,6 @@ export const WhyCognitiveEdgeSection: React.FC = () => {
         <div
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-2">
-            <Zap className="w-4 h-4 text-orange-500" />
-            <span>Transforming Construction & Real Estate</span>
-          </div>
           <h2
             id="why-cognitive-edge-heading"
             className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight"

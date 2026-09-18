@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, Box } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { WEBSITE_CONTENT } from "../data/websiteContent";
 
 export const Hero: React.FC = () => {
@@ -14,16 +14,6 @@ export const Hero: React.FC = () => {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
         <div className="max-w-3xl flex flex-col items-start text-left">
-          {/* Top Technology Badge */}
-          <div
-            id="hero-spatial-badge"
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-cyan-300 text-xs font-semibold uppercase tracking-wider mb-6 shadow-xs"
-          >
-            <Box className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
-            <span>Spatial Computing & Digital Twins</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-          </div>
-
           {/* Main Headline */}
           <h1
             id="hero-title"
