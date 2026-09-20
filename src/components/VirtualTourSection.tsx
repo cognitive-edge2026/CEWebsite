@@ -3,7 +3,6 @@ import {
   Compass,
   Maximize2,
   Minimize2,
-  ExternalLink,
   RotateCcw,
   Sparkles,
   Layers,
@@ -180,18 +179,6 @@ export const VirtualTourSection: React.FC = () => {
                   </button>
                 )}
 
-                <a
-                  id="tour-open-new-tab-btn"
-                  href={tourUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
-                  title="Open tour in new tab (Recommended for iOS & VR headsets)"
-                >
-                  <span>Open in New Tab</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-
                 {isTourLoaded && (
                   <button
                     type="button"
@@ -254,16 +241,6 @@ export const VirtualTourSection: React.FC = () => {
                         <Play className="w-4 h-4 fill-current" />
                         <span>Launch 360° Virtual Tour</span>
                       </button>
-
-                      <a
-                        href={tourUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-colors border border-white/20 cursor-pointer"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        <span>Open in New Tab</span>
-                      </a>
                     </div>
                   </div>
                 </div>
