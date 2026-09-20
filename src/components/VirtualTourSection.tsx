@@ -240,10 +240,6 @@ export const VirtualTourSection: React.FC = () => {
                       <Compass className="w-8 h-8 sm:w-10 sm:h-10 text-white animate-pulse" />
                     </div>
 
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-3">
-                      Sanjeevini The Berries For Birds
-                    </h3>
-
                     <p className="text-sm sm:text-base text-slate-300 leading-relaxed mb-6 max-w-md">
                       Interactive 3D Digital Twin & spatial walkthrough. Explore all rooms, architectural floor nodes, and high-fidelity textures.
                     </p>
@@ -269,10 +265,6 @@ export const VirtualTourSection: React.FC = () => {
                         <span>Open in New Tab</span>
                       </a>
                     </div>
-
-                    <p className="text-xs text-slate-400 mt-5">
-                      Compatible with iOS Safari, Chrome, Firefox, iPadOS, and WebXR VR Headsets
-                    </p>
                   </div>
                 </div>
               )}
