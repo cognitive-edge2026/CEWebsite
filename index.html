@@ -18,6 +18,18 @@
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
+    <script>
+      // Suppress unhandled WebSocket connection errors from dev server proxy or embedded viewers
+      window.addEventListener("error", function (event) {
+        if (
+          event &&
+          event.message &&
+          event.message.toLowerCase().includes("websocket")
+        ) {
+          event.preventDefault();
+        }
+      });
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

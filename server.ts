@@ -118,7 +118,10 @@ Conversation context: ${JSON.stringify(history.slice(-4))}`;
   // Vite middleware in dev or static files in production
   if (!isProduction) {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: false,
+      },
       appType: "spa",
     });
     app.use(vite.middlewares);

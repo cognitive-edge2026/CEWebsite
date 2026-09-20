@@ -380,9 +380,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                       }`}
                     >
                       <span
-                        className={`truncate ${
+                        className={`truncate font-bold ${
                           formData.state
-                            ? "text-slate-900 dark:text-white font-medium"
+                            ? "text-slate-900 dark:text-white"
                             : "text-slate-400 dark:text-slate-500"
                         }`}
                       >
@@ -427,7 +427,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                               value={stateSearch}
                               onChange={(e) => setStateSearch(e.target.value)}
                               placeholder="Type to find state (e.g. CA or Texas)..."
-                              className="w-full pl-9 pr-8 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full pl-9 pr-8 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             {stateSearch && (
                               <button
@@ -455,15 +455,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                                     setIsStateOpen(false);
                                     setStateSearch("");
                                   }}
-                                  className={`w-full px-3 py-2 text-left rounded-lg text-sm flex items-center justify-between transition-colors ${
+                                  className={`w-full px-3 py-2 text-left rounded-lg text-sm font-bold flex items-center justify-between transition-colors ${
                                     isSelected
-                                      ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-400 font-bold"
+                                      ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-400"
                                       : "text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                                   }`}
                                 >
-                                  <span>{state.name}</span>
+                                  <span className="font-bold">{state.name}</span>
                                   <div className="flex items-center gap-2">
-                                    <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                    <span className="text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
                                       {state.code}
                                     </span>
                                     {isSelected && (
@@ -474,7 +474,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                               );
                             })
                           ) : (
-                            <div className="p-4 text-center text-sm text-slate-400">
+                            <div className="p-4 text-center text-sm font-semibold text-slate-400">
                               No state matching "{stateSearch}"
                             </div>
                           )}
@@ -509,9 +509,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                       }`}
                     >
                       <span
-                        className={`truncate ${
+                        className={`truncate font-bold ${
                           formData.city
-                            ? "text-slate-900 dark:text-white font-medium"
+                            ? "text-slate-900 dark:text-white"
                             : "text-slate-400 dark:text-slate-500"
                         }`}
                       >
@@ -558,7 +558,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                               value={citySearch}
                               onChange={(e) => setCitySearch(e.target.value)}
                               placeholder={`Type to find city in ${formData.state}...`}
-                              className="w-full pl-9 pr-8 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full pl-9 pr-8 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             {citySearch && (
                               <button
@@ -583,9 +583,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                                 setIsCityOpen(false);
                                 setCitySearch("");
                               }}
-                              className="w-full px-3 py-2 text-left rounded-lg text-sm font-semibold text-blue-600 dark:text-cyan-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 flex items-center justify-between"
+                              className="w-full px-3 py-2 text-left rounded-lg text-sm font-bold text-blue-600 dark:text-cyan-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 flex items-center justify-between"
                             >
-                              <span>Use "{citySearch.trim()}"</span>
+                              <span className="font-bold">Use "{citySearch.trim()}"</span>
                               <span className="text-xs uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300">
                                 Custom
                               </span>
@@ -604,13 +604,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                                     setIsCityOpen(false);
                                     setCitySearch("");
                                   }}
-                                  className={`w-full px-3 py-2 text-left rounded-lg text-sm flex items-center justify-between transition-colors ${
+                                  className={`w-full px-3 py-2 text-left rounded-lg text-sm font-bold flex items-center justify-between transition-colors ${
                                     isSelected
-                                      ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-400 font-bold"
+                                      ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-400"
                                       : "text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                                   }`}
                                 >
-                                  <span>{city}</span>
+                                  <span className="font-bold">{city}</span>
                                   {isSelected && (
                                     <Check className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
                                   )}
@@ -618,7 +618,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                               );
                             })
                           ) : !citySearch.trim() ? (
-                            <div className="p-4 text-center text-sm text-slate-400">
+                            <div className="p-4 text-center text-sm font-semibold text-slate-400">
                               No cities listed. Type your city in the search box above.
                             </div>
                           ) : null}
