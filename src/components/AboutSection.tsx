@@ -37,6 +37,8 @@ export const AboutSection: React.FC = () => {
                     src={vrForestSpatialImg}
                     alt="Cognitive Edge VR spatial digital twin visualization experience"
                     className="w-full h-full object-cover object-center"
+                    loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                   />
 

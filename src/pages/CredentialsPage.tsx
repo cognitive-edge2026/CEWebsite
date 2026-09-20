@@ -362,6 +362,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                       src="https://lh3.googleusercontent.com/d/1UedSm-xJlTffPnZBI7aart40ioi7mEbW"
                       alt="High-resolution photorealistic 3D architectural render showcase"
                       loading="lazy"
+                      decoding="async"
                       referrerPolicy="no-referrer"
                       className="w-full max-w-full h-auto object-cover rounded-2xl"
                     />
@@ -410,6 +411,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                               src={item.imageUrl}
                               alt={item.altText}
                               loading="lazy"
+                              decoding="async"
                               referrerPolicy="no-referrer"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                             />
@@ -616,6 +618,7 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
                 <img
                   src={CREDENTIAL_RENDER_GALLERY[lightboxIndex].imageUrl}
                   alt={CREDENTIAL_RENDER_GALLERY[lightboxIndex].altText}
+                  decoding="async"
                   referrerPolicy="no-referrer"
                   className="max-w-full max-h-[65vh] w-auto h-auto object-contain"
                 />

@@ -9,38 +9,100 @@ import {
   Layers,
   Move,
   Eye,
+  Play,
+  XCircle,
 } from "lucide-react";
 
 export const VirtualTourSection: React.FC = () => {
   const viewerContainerRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [viewerKey, setViewerKey] = useState(0);
+  // Default to false for on-demand loading to prevent iOS Safari WebKit memory overflow / crashes
+  const [isTourLoaded, setIsTourLoaded] = useState(false);
 
   const tourUrl = "https://viz.spaceviz.ai/mhxp-dev/SanjeeviniTheBerriesForBirds.mhx/225/index.html";
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const isFs = !!(
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement
+      );
+      setIsFullscreen(isFs);
     };
+
     document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("mozfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("MSFullscreenChange", handleFullscreenChange);
+    };
   }, []);
 
   const handleToggleFullscreen = () => {
     if (!viewerContainerRef.current) return;
-    if (!document.fullscreenElement) {
-      viewerContainerRef.current.requestFullscreen().catch((err) => {
-        console.warn("Fullscreen request error:", err);
-      });
+    const el = viewerContainerRef.current as any;
+
+    // Check if Fullscreen API is supported on this element/device
+    const isFullscreenApiSupported =
+      !!el.requestFullscreen ||
+      !!el.webkitRequestFullscreen ||
+      !!el.mozRequestFullScreen ||
+      !!el.msRequestFullscreen;
+
+    if (!isFullscreenApiSupported) {
+      // On iOS Safari / iPhone where div Fullscreen API does not exist:
+      // Open directly in a new tab for native full-screen experience
+      window.open(tourUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    const currentFullscreen =
+      document.fullscreenElement ||
+      (document as any).webkitFullscreenElement ||
+      (document as any).mozFullScreenElement ||
+      (document as any).msFullscreenElement;
+
+    if (!currentFullscreen) {
+      const requestMethod =
+        el.requestFullscreen ||
+        el.webkitRequestFullscreen ||
+        el.mozRequestFullScreen ||
+        el.msRequestFullscreen;
+      if (requestMethod) {
+        requestMethod.call(el).catch(() => {
+          window.open(tourUrl, "_blank", "noopener,noreferrer");
+        });
+      }
     } else {
-      document.exitFullscreen().catch((err) => {
-        console.warn("Exit fullscreen error:", err);
-      });
+      const exitMethod =
+        document.exitFullscreen ||
+        (document as any).webkitExitFullscreen ||
+        (document as any).mozCancelFullScreen ||
+        (document as any).msExitFullscreen;
+      if (exitMethod) {
+        exitMethod.call(document).catch(() => {});
+      }
     }
   };
 
   const handleReload = () => {
     setViewerKey((prev) => prev + 1);
+  };
+
+  const handleLaunchTour = () => {
+    setIsTourLoaded(true);
+  };
+
+  const handleCloseTour = () => {
+    setIsTourLoaded(false);
   };
 
   return (
@@ -81,55 +143,139 @@ export const VirtualTourSection: React.FC = () => {
 
               {/* Action buttons */}
               <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                <button
-                  type="button"
-                  id="tour-reload-btn"
-                  onClick={handleReload}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5"
-                  title="Reset / Reload View"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Reset</span>
-                </button>
+                {isTourLoaded ? (
+                  <>
+                    <button
+                      type="button"
+                      id="tour-reload-btn"
+                      onClick={handleReload}
+                      className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5"
+                      title="Reset / Reload View"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Reset</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      id="tour-close-btn"
+                      onClick={handleCloseTour}
+                      className="p-2 rounded-lg bg-white/10 hover:bg-red-500/20 text-slate-200 hover:text-red-300 text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5"
+                      title="Close tour to save memory and restore smooth scrolling"
+                    >
+                      <XCircle className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Close</span>
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    id="tour-top-launch-btn"
+                    onClick={handleLaunchTour}
+                    className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                    title="Load interactive tour"
+                  >
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>Launch Tour</span>
+                  </button>
+                )}
 
                 <a
                   id="tour-open-new-tab-btn"
                   href={tourUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
-                  title="Open tour in new tab"
+                  className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  title="Open tour in new tab (Recommended for iOS & VR headsets)"
                 >
                   <span>Open in New Tab</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
 
-                <button
-                  type="button"
-                  id="tour-fullscreen-btn"
-                  onClick={handleToggleFullscreen}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors cursor-pointer"
-                  title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-                >
-                  {isFullscreen ? (
-                    <Minimize2 className="w-4 h-4" />
-                  ) : (
-                    <Maximize2 className="w-4 h-4" />
-                  )}
-                </button>
+                {isTourLoaded && (
+                  <button
+                    type="button"
+                    id="tour-fullscreen-btn"
+                    onClick={handleToggleFullscreen}
+                    className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors cursor-pointer"
+                    title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                  >
+                    {isFullscreen ? (
+                      <Minimize2 className="w-4 h-4" />
+                    ) : (
+                      <Maximize2 className="w-4 h-4" />
+                    )}
+                  </button>
+                )}
               </div>
             </div>
 
-            {/* Embedded Iframe */}
-            <div className="relative flex-1 w-full h-full bg-black">
-              <iframe
-                key={viewerKey}
-                id="viewer-frame"
-                src={tourUrl}
-                allow="fullscreen; vr; xr; webxr; gyroscope; accelerometer"
-                title="Cognitive Edge • Interactive 3D Digital Twin Demo "
-                className="w-full h-full border-0 absolute inset-0"
-              />
+            {/* Embedded Viewer or On-Demand Poster */}
+            <div className="relative flex-1 w-full h-full bg-slate-950 overflow-hidden">
+              {isTourLoaded ? (
+                <iframe
+                  key={viewerKey}
+                  id="viewer-frame"
+                  src={tourUrl}
+                  allow="fullscreen; vr; xr; webxr; gyroscope; accelerometer"
+                  title="Cognitive Edge • Interactive 3D Digital Twin Demo"
+                  className="w-full h-full border-0 absolute inset-0"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-black p-6 text-center">
+                  {/* High-res architectural backdrop image */}
+                  <img
+                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+                    alt="Cognitive Edge 3D Villa Digital Twin Walkthrough"
+                    className="absolute inset-0 w-full h-full object-cover opacity-35"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/70" />
+
+                  {/* Centered Launch Call-to-Action */}
+                  <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-blue-600/90 text-white flex items-center justify-center shadow-2xl mb-5 ring-4 ring-blue-500/20">
+                      <Compass className="w-8 h-8 sm:w-10 sm:h-10 text-white animate-pulse" />
+                    </div>
+
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-3">
+                      Sanjeevini The Berries For Birds
+                    </h3>
+
+                    <p className="text-sm sm:text-base text-slate-300 leading-relaxed mb-6 max-w-md">
+                      Interactive 3D Digital Twin & spatial walkthrough. Explore all rooms, architectural floor nodes, and high-fidelity textures.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                      <button
+                        type="button"
+                        id="tour-launch-main-btn"
+                        onClick={handleLaunchTour}
+                        className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                      >
+                        <Play className="w-4 h-4 fill-current" />
+                        <span>Launch 360° Virtual Tour</span>
+                      </button>
+
+                      <a
+                        href={tourUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-colors border border-white/20 cursor-pointer"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Open in New Tab</span>
+                      </a>
+                    </div>
+
+                    <p className="text-xs text-slate-400 mt-5">
+                      Compatible with iOS Safari, Chrome, Firefox, iPadOS, and WebXR VR Headsets
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -160,3 +306,4 @@ export const VirtualTourSection: React.FC = () => {
     </section>
   );
 };
+

@@ -67,6 +67,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                   <img
                     src={service.image}
                     alt={service.title}
+                    loading="lazy"
+                    decoding="async"
                     onError={(e) => {
                       // Fallback to local high-res construction visual if an image fails to load
                       (e.target as HTMLImageElement).src = "/construction_bim_vis.jpg";
