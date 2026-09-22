@@ -26,9 +26,6 @@ export const WhyCognitiveEdgeSection: React.FC = () => {
           >
             Why Cognitive Edge
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300">
-            Backed by proven empirical metrics from high-stakes residential and commercial developments. Here is how our spatial computing pipeline transforms bottom-line project economics.
-          </p>
         </div>
 
         {/* 3 Core Metrics Taken Directly From The Flyer */}

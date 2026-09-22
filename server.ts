@@ -24,14 +24,12 @@ function getAIClient(): GoogleGenAI {
 
 async function startServer() {
   const app = express();
+  const PORT = 3000;
 
-  // Robust environment detection:
-  // - In AI Studio development, 'npm run dev' requires port 3000 and Vite middleware.
-  // - In Cloud Run production, the container must serve prebuilt dist/ files and bind to process.env.PORT (default 8080).
-  const distExists = fs.existsSync(path.join(process.cwd(), "dist", "index.html"));
-  const isExplicitDev = process.env.npm_lifecycle_event === "dev" || (process.env.NODE_ENV === "development" && !process.env.PORT);
-  const isProduction = process.env.NODE_ENV === "production" || (distExists && !isExplicitDev) || Boolean(process.argv[1]?.includes("dist"));
-  const primaryPort = isProduction ? (Number(process.env.PORT) || 8080) : 3000;
+  const isProduction =
+    process.env.NODE_ENV === "production" ||
+    process.env.npm_lifecycle_event === "start" ||
+    Boolean(process.argv[1]?.includes("dist"));
 
   app.use(express.json());
 
@@ -139,25 +137,9 @@ Conversation context: ${JSON.stringify(history.slice(-4))}`;
     });
   }
 
-  // Primary listener
-  const primaryServer = app.listen(primaryPort, "0.0.0.0", () => {
-    console.log(`Cognitive Edge Server running on http://0.0.0.0:${primaryPort}`);
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Cognitive Edge Server running on http://0.0.0.0:${PORT}`);
   });
-  primaryServer.on("error", (err: any) => {
-    console.error(`Error on primary port ${primaryPort}:`, err?.message || err);
-  });
-
-  // In production, also attempt binding port 3000 if different from primary port
-  if (isProduction && primaryPort !== 3000) {
-    try {
-      const secondaryServer = app.listen(3000, "0.0.0.0", () => {
-        console.log("Cognitive Edge Server also listening on http://0.0.0.0:3000");
-      });
-      secondaryServer.on("error", (err: any) => {
-        console.warn("Secondary port 3000 listener info:", err?.message || err);
-      });
-    } catch (_) {}
-  }
 }
 
 startServer();

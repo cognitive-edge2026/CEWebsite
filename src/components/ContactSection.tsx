@@ -710,6 +710,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                       <option value="Digital Twin Creation">Digital Twin Creation (Architectural 3D)</option>
                       <option value="Virtual Reality Experiences">Virtual Reality Experiences (Full Scale VR Walkthrough)</option>
                       <option value="Interior & Exterior Visuallization">Interior & Exterior Visuallization (Interactive Customization)</option>
+                      <option value="Web based interactive experience">Web based interactive experience (Browser & Cloud Streaming)</option>
                       <option value="Interactive Touch Kiosks">Interactive Touch Kiosks (Showroom & Sales Center)</option>
                       <option value="Tablet & Mobile Experience">Tablet & Mobile Experience (Portable Presentation)</option>
                       <option value="360 Degree virtual tours">360 Degree virtual tours (Web & Mobile Immersion)</option>

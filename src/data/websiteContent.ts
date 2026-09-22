@@ -1,6 +1,7 @@
 import touchKioskImg from "../assets/images/touch_kiosk_display_1789055717373.jpg";
 import tabletMobileImg from "../assets/images/tablet_mobile_spatial_1789055738910.jpg";
 import constructionBimImg from "../assets/images/construction_bim_vis_1789322528856.jpg";
+import webInteractiveImg from "../assets/images/regenerated_image_1790059284114.jpg";
 
 export interface ServiceItem {
   id: string;
@@ -133,7 +134,7 @@ export const WEBSITE_CONTENT = {
       badge: "Full Scale Immersion",
       subtitle: "Immerse yourself in stunning VR environments",
       description:
-        "Immerse yourself in stunning VR environments that bring your projects to life. Walk through spaces, customize layouts, and experience designs in full scale before construction begins, enabling better decision-making and client satisfaction.",
+        "The most immersive 1-1 experience, fully controlled by your sales agent.",
       highlights: [
         "Photorealistic lighting & materiality",
         "Real-time finish & layout switching",
@@ -157,13 +158,28 @@ export const WEBSITE_CONTENT = {
       image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80",
     },
     {
+      id: "web-based-interactive-experience",
+      title: "Web based interactive experience",
+      category: "Browser & Cloud Streaming",
+      badge: "Zero Installation",
+      subtitle: "Interactive spatial exploration from any browser",
+      description:
+        "Customers explore the project through an interactive web browser experience from the comfort of their own home. Full project walkthrough, floor plan exploration, and amenity showcase — accessible from any browser on any device.",
+      highlights: [
+        "Full project walkthrough & 3D navigation",
+        "Interactive floor plan exploration",
+        "Amenity showcase accessible from any browser",
+      ],
+      image: webInteractiveImg,
+    },
+    {
       id: "interactive-touch-kiosks",
       title: "Interactive Touch Kiosks",
       category: "Showroom & Sales Center",
       badge: "Multi-Touch Display",
       subtitle: "Engaging large-format touch displays for sales galleries and leasing centers",
       description:
-        "Transform your sales gallery or showroom into an interactive experience center. Large-format multi-touch kiosks empower prospective buyers to explore development masterplans, navigate unit floor plates, and inspect sunlight orientation in real time.",
+        "Families explore layouts, amenities, and floor plans interactively at their own pace.",
       highlights: [
         "Ultra-responsive 4K multi-touch displays",
         "Real-time unit availability & inventory sync",
@@ -196,7 +212,6 @@ export const WEBSITE_CONTENT = {
         "Deliver frictionless, high-resolution panoramic walkthroughs that load instantly on any web browser or mobile device without apps or plugins. Features interactive hotspots, floor plan minimaps, embedded audio narration, and lead capture forms.",
       highlights: [
         "Zero-installation WebGL/WebXR streaming",
-        "Interactive hotspot tags & callouts",
       ],
       image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
     },
@@ -222,10 +237,9 @@ export const WEBSITE_CONTENT = {
       badge: "4D Construction Phasing",
       subtitle: "Bridge architectural schematics, construction sequencing, and MEP coordination",
       description:
-        "Translate complex BIM data, structural schematics, and construction milestone schedules into dynamic 4D visual simulations. Eliminate on-site clash errors, align contractor trades, and present clear progress milestones to project stakeholders.",
+        "Eliminate on-site clash errors, align contractor trades, and present clear progress milestones to investors and project stakeholders.",
       highlights: [
         "4D timeline sequencing to final handover",
-        "BIM & MEP clash detection visual overlays",
         "Investor milestone presentations & fly-throughs",
       ],
       image: constructionBimImg,

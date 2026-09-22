@@ -97,9 +97,6 @@ export const CredentialsSection: React.FC<CredentialsSectionProps> = ({
                       <h4 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
                         {cat.label}
                       </h4>
-                      <p className="mt-2.5 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                        {cat.desc}
-                      </p>
                     </div>
 
                     <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-cyan-400">
