@@ -116,6 +116,7 @@ Conversation context: ${JSON.stringify(history.slice(-4))}`;
   // Vite middleware in dev or static files in production
   if (!isProduction) {
     const vite = await createViteServer({
+      configFile: path.resolve(process.cwd(), "vite.config.ts"),
       server: {
         middlewareMode: true,
         hmr: false,

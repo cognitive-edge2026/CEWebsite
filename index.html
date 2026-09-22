@@ -7,6 +7,152 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>Cognitive Edge LTD | Intelligence Beyond Reality</title>
+
+    <!-- Global Early WebSocket & Error Shielding -->
+    <script>
+      (function () {
+        if (typeof window === "undefined") return;
+
+        // 1. Intercept Vite dev HMR WebSocket attempts to completely prevent "WebSocket closed without opened."
+        var NativeWebSocket = window.WebSocket;
+        if (NativeWebSocket) {
+          var PatchedWebSocket = function (url, protocols) {
+            var isViteHmr = false;
+            try {
+              var urlStr = String(url || "");
+              if (
+                protocols === "vite-hmr" ||
+                (Array.isArray(protocols) && protocols.indexOf("vite-hmr") !== -1) ||
+                urlStr.indexOf("token=") !== -1 ||
+                urlStr.indexOf("vite") !== -1
+              ) {
+                isViteHmr = true;
+              }
+            } catch (_) {}
+
+            if (isViteHmr) {
+              var target = new EventTarget();
+              var mockSocket = {
+                url: String(url || ""),
+                readyState: 1, // OPEN
+                protocol: "vite-hmr",
+                extensions: "",
+                bufferedAmount: 0,
+                binaryType: "blob",
+                send: function () {},
+                close: function () {
+                  mockSocket.readyState = 3;
+                },
+                addEventListener: function (type, listener, options) {
+                  target.addEventListener(type, listener, options);
+                  if (type === "open") {
+                    setTimeout(function () {
+                      try {
+                        var openEvt = new Event("open");
+                        target.dispatchEvent(openEvt);
+                        if (typeof mockSocket.onopen === "function") {
+                          mockSocket.onopen(openEvt);
+                        }
+                      } catch (_) {}
+                    }, 0);
+                  }
+                },
+                removeEventListener: function (type, listener, options) {
+                  target.removeEventListener(type, listener, options);
+                },
+                dispatchEvent: function (evt) {
+                  return target.dispatchEvent(evt);
+                },
+                onopen: null,
+                onclose: null,
+                onerror: null,
+                onmessage: null,
+              };
+              return mockSocket;
+            }
+
+            return new NativeWebSocket(url, protocols);
+          };
+
+          PatchedWebSocket.CONNECTING = 0;
+          PatchedWebSocket.OPEN = 1;
+          PatchedWebSocket.CLOSING = 2;
+          PatchedWebSocket.CLOSED = 3;
+          PatchedWebSocket.prototype = NativeWebSocket.prototype;
+          window.WebSocket = PatchedWebSocket;
+        }
+
+        // 2. Comprehensive console filtering for any residual WebSocket logs
+        var origConsoleError = console.error;
+        var origConsoleWarn = console.warn;
+
+        function isWsNoise(val) {
+          if (!val) return false;
+          var str = "";
+          try {
+            if (typeof val === "string") {
+              str = val;
+            } else if (val instanceof Error || typeof val === "object") {
+              str = (val.message || "") + " " + (val.stack || "") + " " + String(val);
+            } else {
+              str = String(val);
+            }
+          } catch (_) {
+            return false;
+          }
+          str = str.toLowerCase();
+          return (
+            str.indexOf("websocket closed without opened") !== -1 ||
+            str.indexOf("[vite] failed to connect to websocket") !== -1 ||
+            str.indexOf("failed to connect to websocket") !== -1
+          );
+        }
+
+        console.error = function () {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isWsNoise(arguments[i])) {
+              return;
+            }
+          }
+          origConsoleError.apply(console, arguments);
+        };
+
+        console.warn = function () {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isWsNoise(arguments[i])) {
+              return;
+            }
+          }
+          origConsoleWarn.apply(console, arguments);
+        };
+
+        // 3. Catch uncaught promise rejections and error events
+        window.addEventListener(
+          "unhandledrejection",
+          function (event) {
+            if (!event) return;
+            if (isWsNoise(event.reason)) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+            }
+          },
+          true
+        );
+
+        window.addEventListener(
+          "error",
+          function (event) {
+            if (!event) return;
+            if (isWsNoise(event.error) || isWsNoise(event.message)) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+            }
+          },
+          true
+        );
+      })();
+    </script>
+
     <!-- Favicon & Browser Tab Icons (Cognitive Edge LTD Emblem centered on circular white canvas) -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -21,34 +167,7 @@
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <script>
-      // Defensive error shielding for iOS Safari, WebGL contexts, and third-party iframe messengers
-      window.addEventListener("error", function (event) {
-        if (!event) return;
-        var msg = (event.message || "").toLowerCase();
-        if (
-          msg.includes("websocket") ||
-          msg.includes("script error") ||
-          msg.includes("webgl") ||
-          msg.includes("resizeobserver")
-        ) {
-          event.preventDefault();
-        }
-      });
-      window.addEventListener("unhandledrejection", function (event) {
-        if (!event) return;
-        var reason = "" + (event.reason || "");
-        if (
-          reason.toLowerCase().includes("websocket") ||
-          reason.toLowerCase().includes("webgl") ||
-          reason.toLowerCase().includes("fullscreen")
-        ) {
-          event.preventDefault();
-        }
-      });
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

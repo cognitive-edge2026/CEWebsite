@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import {
   Compass,
   Maximize2,
@@ -10,17 +10,33 @@ import {
   Eye,
   Play,
   XCircle,
+  ExternalLink,
+  Loader2,
 } from "lucide-react";
 
 export const VirtualTourSection: React.FC = () => {
   const viewerContainerRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isCssFullscreen, setIsCssFullscreen] = useState(false);
   const [viewerKey, setViewerKey] = useState(0);
-  // Default to false for on-demand loading to prevent iOS Safari WebKit memory overflow / crashes
   const [isTourLoaded, setIsTourLoaded] = useState(false);
+  const [isIframeLoading, setIsIframeLoading] = useState(false);
+  const [hasTourError, setHasTourError] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   const tourUrl = "https://viz.spaceviz.ai/mhxp-dev/SanjeeviniTheBerriesForBirds.mhx/225/index.html";
 
+  // Detect iOS / iPadOS / WebKit devices for specific optimizations
+  useEffect(() => {
+    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+      const isApple =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && (navigator.maxTouchPoints > 1 || "ontouchend" in document));
+      setIsIOS(isApple);
+    }
+  }, []);
+
+  // Sync HTML5 Fullscreen API state
   useEffect(() => {
     const handleFullscreenChange = () => {
       const isFs = !!(
@@ -30,6 +46,9 @@ export const VirtualTourSection: React.FC = () => {
         (document as any).msFullscreenElement
       );
       setIsFullscreen(isFs);
+      if (!isFs && !isCssFullscreen) {
+        setIsCssFullscreen(false);
+      }
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
@@ -43,23 +62,82 @@ export const VirtualTourSection: React.FC = () => {
       document.removeEventListener("mozfullscreenchange", handleFullscreenChange);
       document.removeEventListener("MSFullscreenChange", handleFullscreenChange);
     };
-  }, []);
+  }, [isCssFullscreen]);
 
-  const handleToggleFullscreen = () => {
+  // Lock scroll when in CSS fullscreen (essential on iOS Safari)
+  useEffect(() => {
+    if (isCssFullscreen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setIsCssFullscreen(false);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [isCssFullscreen]);
+
+  // Request iOS 13+ device motion / gyroscope permissions within the direct user gesture
+  const requestIOSMotionPermissions = async () => {
+    try {
+      const DeviceOrientation = (window as any).DeviceOrientationEvent;
+      if (DeviceOrientation && typeof DeviceOrientation.requestPermission === "function") {
+        await DeviceOrientation.requestPermission();
+      }
+    } catch {
+      // Graceful fallback if user cancels or origin is restricted
+    }
+
+    try {
+      const DeviceMotion = (window as any).DeviceMotionEvent;
+      if (DeviceMotion && typeof DeviceMotion.requestPermission === "function") {
+        await DeviceMotion.requestPermission();
+      }
+    } catch {
+      // Graceful fallback
+    }
+  };
+
+  const handleLaunchTour = async () => {
+    await requestIOSMotionPermissions();
+    setHasTourError(false);
+    setIsIframeLoading(true);
+    setIsTourLoaded(true);
+  };
+
+  const handleReload = async () => {
+    await requestIOSMotionPermissions();
+    setHasTourError(false);
+    setIsIframeLoading(true);
+    setViewerKey((prev) => prev + 1);
+  };
+
+  const handleCloseTour = () => {
+    setIsTourLoaded(false);
+    setIsIframeLoading(false);
+    setHasTourError(false);
+    setIsCssFullscreen(false);
+  };
+
+  const handleToggleFullscreen = useCallback(() => {
     if (!viewerContainerRef.current) return;
     const el = viewerContainerRef.current as any;
 
-    // Check if Fullscreen API is supported on this element/device
+    // Check if native Fullscreen API is supported on this element/device
     const isFullscreenApiSupported =
       !!el.requestFullscreen ||
       !!el.webkitRequestFullscreen ||
       !!el.mozRequestFullScreen ||
       !!el.msRequestFullscreen;
 
-    if (!isFullscreenApiSupported) {
-      // On iOS Safari / iPhone where div Fullscreen API does not exist:
-      // Open directly in a new tab for native full-screen experience
-      window.open(tourUrl, "_blank", "noopener,noreferrer");
+    // On iOS Safari / iPhone where div Fullscreen API does not exist, toggle CSS pseudo-fullscreen
+    if (!isFullscreenApiSupported || isIOS) {
+      setIsCssFullscreen((prev) => !prev);
       return;
     }
 
@@ -77,8 +155,10 @@ export const VirtualTourSection: React.FC = () => {
         el.msRequestFullscreen;
       if (requestMethod) {
         requestMethod.call(el).catch(() => {
-          window.open(tourUrl, "_blank", "noopener,noreferrer");
+          setIsCssFullscreen(true);
         });
+      } else {
+        setIsCssFullscreen(true);
       }
     } else {
       const exitMethod =
@@ -89,20 +169,11 @@ export const VirtualTourSection: React.FC = () => {
       if (exitMethod) {
         exitMethod.call(document).catch(() => {});
       }
+      setIsCssFullscreen(false);
     }
-  };
+  }, [isIOS]);
 
-  const handleReload = () => {
-    setViewerKey((prev) => prev + 1);
-  };
-
-  const handleLaunchTour = () => {
-    setIsTourLoaded(true);
-  };
-
-  const handleCloseTour = () => {
-    setIsTourLoaded(false);
-  };
+  const activeFullscreen = isFullscreen || isCssFullscreen;
 
   return (
     <section
@@ -126,18 +197,30 @@ export const VirtualTourSection: React.FC = () => {
           <div
             ref={viewerContainerRef}
             id="tour-viewer-container"
-            className="relative w-full rounded-2xl overflow-hidden bg-black flex flex-col h-[520px] sm:h-[620px] md:h-[720px] lg:h-[780px]"
+            className={`relative w-full overflow-hidden bg-black flex flex-col transition-all duration-200 ${
+              isCssFullscreen
+                ? "fixed inset-0 z-[9999] w-screen h-[100dvh] rounded-none p-0"
+                : "rounded-2xl h-[520px] sm:h-[620px] md:h-[720px] lg:h-[780px]"
+            }`}
+            style={{
+              minHeight: isCssFullscreen ? "100dvh" : "480px",
+            }}
           >
             {/* Top Branding Bar */}
             <div
               id="header"
-              className="w-full px-4 sm:px-6 py-3.5 bg-slate-950/90 backdrop-blur-sm text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 z-10 shrink-0"
+              className="w-full px-4 sm:px-6 py-3.5 bg-slate-950/95 backdrop-blur-md text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 z-30 shrink-0"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shrink-0" />
+                <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shrink-0 animate-pulse" />
                 <span className="text-xs sm:text-sm md:text-base font-semibold text-white tracking-wide truncate">
                   Cognitive Edge • Interactive 3D Digital Twin Demo
                 </span>
+                {isIOS && (
+                  <span className="hidden md:inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                    iOS WebKit Ready
+                  </span>
+                )}
               </div>
 
               {/* Action buttons */}
@@ -153,6 +236,34 @@ export const VirtualTourSection: React.FC = () => {
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span className="hidden sm:inline">Reset</span>
+                    </button>
+
+                    {/* On iOS devices, provide direct fullscreen link for zero-friction access */}
+                    {isIOS && (
+                      <a
+                        href={tourUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5"
+                        title="Open Direct Fullscreen Tour"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Direct View</span>
+                      </a>
+                    )}
+
+                    <button
+                      type="button"
+                      id="tour-fullscreen-btn"
+                      onClick={handleToggleFullscreen}
+                      className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors cursor-pointer"
+                      title={activeFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                    >
+                      {activeFullscreen ? (
+                        <Minimize2 className="w-4 h-4 text-cyan-400" />
+                      ) : (
+                        <Maximize2 className="w-4 h-4" />
+                      )}
                     </button>
 
                     <button
@@ -178,37 +289,88 @@ export const VirtualTourSection: React.FC = () => {
                     <span>Launch Tour</span>
                   </button>
                 )}
-
-                {isTourLoaded && (
-                  <button
-                    type="button"
-                    id="tour-fullscreen-btn"
-                    onClick={handleToggleFullscreen}
-                    className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors cursor-pointer"
-                    title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-                  >
-                    {isFullscreen ? (
-                      <Minimize2 className="w-4 h-4" />
-                    ) : (
-                      <Maximize2 className="w-4 h-4" />
-                    )}
-                  </button>
-                )}
               </div>
             </div>
 
             {/* Embedded Viewer or On-Demand Poster */}
-            <div className="relative flex-1 w-full h-full bg-slate-950 overflow-hidden">
+            <div
+              className="relative flex-1 w-full h-full min-h-[460px] sm:min-h-[560px] bg-slate-950 overflow-hidden"
+              style={{
+                WebkitOverflowScrolling: "touch",
+              }}
+            >
               {isTourLoaded ? (
-                <iframe
-                  key={viewerKey}
-                  id="viewer-frame"
-                  src={tourUrl}
-                  allow="fullscreen; vr; xr; webxr; gyroscope; accelerometer"
-                  title="Cognitive Edge • Interactive 3D Digital Twin Demo"
-                  className="w-full h-full border-0 absolute inset-0"
-                  loading="lazy"
-                />
+                <>
+                  {/* Loading indicator */}
+                  {isIframeLoading && (
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-xs text-white gap-3 p-4 pointer-events-none">
+                      <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                      <p className="text-xs sm:text-sm text-slate-200 font-medium">
+                        Loading 3D Spatial Walkthrough...
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Error recovery card if WebKit memory or network fails */}
+                  {hasTourError ? (
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950 text-white p-6 text-center">
+                      <div className="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
+                        <RotateCcw className="w-7 h-7" />
+                      </div>
+                      <h4 className="text-base sm:text-lg font-bold text-white mb-2">
+                        Walkthrough Ready to Reload
+                      </h4>
+                      <p className="text-xs sm:text-sm text-slate-400 max-w-md mb-6 leading-relaxed">
+                        Tap below to reload the 3D walkthrough with refreshed WebGL buffers.
+                      </p>
+                      <div className="flex flex-wrap items-center justify-center gap-3">
+                        <button
+                          type="button"
+                          onClick={handleReload}
+                          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors cursor-pointer"
+                        >
+                          Reload Tour
+                        </button>
+                        <a
+                          href={tourUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs transition-colors cursor-pointer"
+                        >
+                          Open in Direct View
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <iframe
+                      key={viewerKey}
+                      id="viewer-frame"
+                      src={tourUrl}
+                      allow="accelerometer; autoplay; camera; display-capture; fullscreen; geolocation; gyroscope; magnetometer; microphone; picture-in-picture; xr-spatial-tracking; screen-wake-lock; vr; webxr"
+                      allowFullScreen={true}
+                      title="Cognitive Edge • Interactive 3D Digital Twin Demo"
+                      className="w-full h-full border-0 absolute inset-0"
+                      loading="eager"
+                      onLoad={() => {
+                        setIsIframeLoading(false);
+                        setHasTourError(false);
+                      }}
+                      onError={() => {
+                        setIsIframeLoading(false);
+                        setHasTourError(true);
+                      }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        minHeight: "460px",
+                        border: 0,
+                        display: "block",
+                        touchAction: "manipulation",
+                        WebkitOverflowScrolling: "touch",
+                      }}
+                    />
+                  )}
+                </>
               ) : (
                 <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-black p-6 text-center">
                   {/* High-res architectural backdrop image */}
@@ -267,7 +429,7 @@ export const VirtualTourSection: React.FC = () => {
 
             <div className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Full WebXR & VR headset compatible</span>
+              <span>Full WebXR & Apple iOS compatible</span>
             </div>
           </div>
         </div>
@@ -275,4 +437,3 @@ export const VirtualTourSection: React.FC = () => {
     </section>
   );
 };
-
