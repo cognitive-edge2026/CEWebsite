@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
+import * as THREE from "three";
 import {
   Compass,
   Maximize2,
@@ -16,19 +17,63 @@ import {
 
 export const VirtualTourSection: React.FC = () => {
   const viewerContainerRef = useRef<HTMLDivElement>(null);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const isDraggingRef = useRef(false);
-  const startPosRef = useRef({ x: 0, y: 0 });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Three.js instances ref
+  const threeRef = useRef<{
+    renderer: THREE.WebGLRenderer | null;
+    scene: THREE.Scene | null;
+    camera: THREE.PerspectiveCamera | null;
+    mesh: THREE.Mesh | null;
+    texture: THREE.Texture | null;
+    geometry: THREE.BufferGeometry | null;
+    material: THREE.Material | null;
+    animationFrameId: number | null;
+    lon: number;
+    lat: number;
+    targetLon: number;
+    targetLat: number;
+    isUserInteracting: boolean;
+    onPointerDownPointerX: number;
+    onPointerDownPointerY: number;
+    onPointerDownLon: number;
+    onPointerDownLat: number;
+    touchStartDistance: number;
+    touchStartFov: number;
+  }>({
+    renderer: null,
+    scene: null,
+    camera: null,
+    mesh: null,
+    texture: null,
+    geometry: null,
+    material: null,
+    animationFrameId: null,
+    lon: 0,
+    lat: 0,
+    targetLon: 0,
+    targetLat: 0,
+    isUserInteracting: false,
+    onPointerDownPointerX: 0,
+    onPointerDownPointerY: 0,
+    onPointerDownLon: 0,
+    onPointerDownLat: 0,
+    touchStartDistance: 0,
+    touchStartFov: 75,
+  });
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isCssFullscreen, setIsCssFullscreen] = useState(false);
-  const [viewerKey, setViewerKey] = useState(0);
   const [isTourLoaded, setIsTourLoaded] = useState(false);
-  const [isIframeLoading, setIsIframeLoading] = useState(false);
+  const [isViewerLoading, setIsViewerLoading] = useState(false);
   const [hasTourError, setHasTourError] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
 
+  // High-fidelity cloud tour URL for external / direct full-screen walkthrough
   const tourUrl = "https://viz.spaceviz.ai/mhxp-dev/SanjeeviniTheBerriesForBirds.mhx/225/index.html";
+
+  // Optimized, lightweight 2048x1024 360 panorama image (eliminates iOS memory crash)
+  const panoramaAsset = "/panoramas/luxury_villa_atrium_2048.jpg";
 
   // Detect iOS / iPadOS / WebKit devices for specific optimizations
   useEffect(() => {
@@ -86,127 +131,295 @@ export const VirtualTourSection: React.FC = () => {
     }
   }, [isCssFullscreen]);
 
-  // WebGL memory optimization for high-DPI Retina screens:
-  // Equivalent WebGL canvas optimization capping pixel ratio: renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const maxPixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-
-    // Provide global renderer optimization helper if Three.js / WebGL renderer is invoked
-    const configureRenderer = (renderer: any) => {
-      if (renderer && typeof renderer.setPixelRatio === "function") {
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      }
-    };
-    (window as any).__configureWebGLRenderer = configureRenderer;
-
-    const optimizeCanvas = (canvas: HTMLCanvasElement) => {
-      try {
-        if (canvas.dataset.retinaOptimized) return;
-        canvas.dataset.retinaOptimized = "true";
-        const rect = canvas.getBoundingClientRect();
-        if (rect.width > 0 && rect.height > 0) {
-          const targetWidth = Math.round(rect.width * maxPixelRatio);
-          const targetHeight = Math.round(rect.height * maxPixelRatio);
-          if (canvas.width > targetWidth || canvas.height > targetHeight) {
-            canvas.width = targetWidth;
-            canvas.height = targetHeight;
-          }
-        }
-      } catch {
-        // Safe fallback
-      }
-    };
-
-    const container = viewerContainerRef.current;
-    if (container) {
-      container.querySelectorAll("canvas").forEach(optimizeCanvas);
-
-      const observer = new MutationObserver((mutations) => {
-        for (const mutation of mutations) {
-          for (const node of Array.from(mutation.addedNodes)) {
-            if (node instanceof HTMLCanvasElement) {
-              optimizeCanvas(node);
-            } else if (node instanceof HTMLElement) {
-              node.querySelectorAll("canvas").forEach(optimizeCanvas);
-            }
-          }
-        }
-      });
-
-      observer.observe(container, { childList: true, subtree: true });
-      return () => {
-        observer.disconnect();
-        delete (window as any).__configureWebGLRenderer;
-      };
+  // Clean disposal of all Three.js resources to prevent memory leaks on mobile
+  const cleanupThree = useCallback(() => {
+    const state = threeRef.current;
+    if (state.animationFrameId !== null) {
+      cancelAnimationFrame(state.animationFrameId);
+      state.animationFrameId = null;
     }
-  }, [viewerKey, isTourLoaded]);
 
-  // Handle WebGL context loss gracefully without crashing iOS tab
-  useEffect(() => {
-    const handleContextLost = (e: Event) => {
-      e.preventDefault();
-      setHasTourError(true);
-    };
-
-    const container = viewerContainerRef.current;
-    if (container) {
-      container.addEventListener("webglcontextlost", handleContextLost);
-      return () => {
-        container.removeEventListener("webglcontextlost", handleContextLost);
-      };
+    if (state.geometry) {
+      state.geometry.dispose();
+      state.geometry = null;
     }
+    if (state.texture) {
+      state.texture.dispose();
+      state.texture = null;
+    }
+    if (state.material) {
+      if (Array.isArray(state.material)) {
+        state.material.forEach((m) => m.dispose());
+      } else {
+        state.material.dispose();
+      }
+      state.material = null;
+    }
+    if (state.mesh && state.scene) {
+      state.scene.remove(state.mesh);
+      state.mesh = null;
+    }
+    if (state.renderer) {
+      state.renderer.dispose();
+      state.renderer.forceContextLoss();
+      state.renderer = null;
+    }
+    state.scene = null;
+    state.camera = null;
   }, []);
 
-  // Tap/Click Activation: initializes or attaches active render loop
+  // Initialize Three.js WebGL canvas ONLY when user explicitly starts the tour
+  const initThreeViewer = useCallback(() => {
+    if (!canvasRef.current || !viewerContainerRef.current) return;
+
+    cleanupThree();
+    setIsViewerLoading(true);
+    setHasTourError(false);
+
+    try {
+      const container = viewerContainerRef.current;
+      const canvas = canvasRef.current;
+      const width = container.clientWidth || 800;
+      const height = container.clientHeight || 500;
+
+      // 1. Detect mobile devices / iOS and hard-cap the pixel ratio to prevent GPU memory crash
+      const isMobileOrIOS =
+        /iPad|iPhone|iPod|Android/i.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+      // 2. Low-memory canvas configuration: low-power, antialias false, failIfMajorPerformanceCaveat true
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        powerPreference: "low-power",
+        antialias: false,
+        failIfMajorPerformanceCaveat: true,
+      });
+
+      // Lower Canvas Resolution on iOS: hard-cap pixel ratio at 1.25 on iOS/mobile, max 2 on desktop
+      const pixelRatio = isMobileOrIOS
+        ? Math.min(window.devicePixelRatio || 1, 1.25)
+        : Math.min(window.devicePixelRatio || 1, 2);
+      renderer.setPixelRatio(pixelRatio);
+      renderer.setSize(width, height, false);
+
+      // 3. Graceful fallback on WebGL context loss so page does NOT auto-refresh
+      const handleContextLost = (e: Event) => {
+        e.preventDefault();
+        cleanupThree();
+        setHasTourError(true);
+        setIsViewerLoading(false);
+      };
+      canvas.addEventListener("webglcontextlost", handleContextLost, false);
+
+      // 4. Scene and Perspective Camera
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, width / height, 1, 1100);
+
+      // 5. Inverted Sphere geometry for 360 panorama
+      const geometry = new THREE.SphereGeometry(500, 60, 40);
+      geometry.scale(-1, 1, 1);
+
+      // 6. Texture Memory Safeguards: generateMipmaps = false, minFilter = THREE.LinearFilter
+      const loader = new THREE.TextureLoader();
+      loader.crossOrigin = "anonymous";
+      loader.load(
+        panoramaAsset,
+        (texture) => {
+          texture.generateMipmaps = false;
+          texture.minFilter = THREE.LinearFilter;
+          texture.colorSpace = THREE.SRGBColorSpace;
+
+          const material = new THREE.MeshBasicMaterial({ map: texture });
+          const mesh = new THREE.Mesh(geometry, material);
+          scene.add(mesh);
+
+          threeRef.current.texture = texture;
+          threeRef.current.material = material;
+          threeRef.current.mesh = mesh;
+          threeRef.current.geometry = geometry;
+
+          setIsViewerLoading(false);
+          setHasTourError(false);
+        },
+        undefined,
+        () => {
+          // Fallback if local asset fails
+          setIsViewerLoading(false);
+          setHasTourError(true);
+        }
+      );
+
+      threeRef.current.renderer = renderer;
+      threeRef.current.scene = scene;
+      threeRef.current.camera = camera;
+      threeRef.current.lon = 0;
+      threeRef.current.lat = 0;
+      threeRef.current.targetLon = 0;
+      threeRef.current.targetLat = 0;
+
+      // 7. Render Loop with smooth damping
+      const animate = () => {
+        const state = threeRef.current;
+        if (!state.renderer || !state.scene || !state.camera) return;
+
+        // Smooth damping interpolation
+        state.lon += (state.targetLon - state.lon) * 0.1;
+        state.lat += (state.targetLat - state.lat) * 0.1;
+
+        // Clamp latitude to avoid gimbal flip
+        state.lat = Math.max(-85, Math.min(85, state.lat));
+
+        const phi = THREE.MathUtils.degToRad(90 - state.lat);
+        const theta = THREE.MathUtils.degToRad(state.lon);
+
+        const target = new THREE.Vector3(
+          500 * Math.sin(phi) * Math.cos(theta),
+          500 * Math.cos(phi),
+          500 * Math.sin(phi) * Math.sin(theta)
+        );
+
+        state.camera.lookAt(target);
+        state.renderer.render(state.scene, state.camera);
+
+        state.animationFrameId = requestAnimationFrame(animate);
+      };
+
+      animate();
+    } catch {
+      cleanupThree();
+      setHasTourError(true);
+      setIsViewerLoading(false);
+    }
+  }, [cleanupThree, panoramaAsset]);
+
+  // Re-run viewer initialization when isTourLoaded transitions to true
+  useEffect(() => {
+    if (isTourLoaded) {
+      initThreeViewer();
+    } else {
+      cleanupThree();
+    }
+
+    return () => {
+      cleanupThree();
+    };
+  }, [isTourLoaded, initThreeViewer, cleanupThree]);
+
+  // Resize handler for responsive canvas
+  useEffect(() => {
+    const handleResize = () => {
+      const state = threeRef.current;
+      if (!state.renderer || !state.camera || !viewerContainerRef.current) return;
+
+      const width = viewerContainerRef.current.clientWidth;
+      const height = viewerContainerRef.current.clientHeight;
+
+      state.camera.aspect = width / height;
+      state.camera.updateProjectionMatrix();
+      state.renderer.setSize(width, height, false);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Controls: Pure touch-drag / mouse-drag panning controls (NO gyroscope orientation events)
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isTourLoaded) {
+      handleLaunchTour();
+      return;
+    }
+
+    const state = threeRef.current;
+    state.isUserInteracting = true;
+    state.onPointerDownPointerX = e.clientX;
+    state.onPointerDownPointerY = e.clientY;
+    state.onPointerDownLon = state.targetLon;
+    state.onPointerDownLat = state.targetLat;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const state = threeRef.current;
+    if (!state.isUserInteracting) return;
+
+    // Standard pointer/touch panning orbit sensitivity
+    state.targetLon = (state.onPointerDownPointerX - e.clientX) * 0.15 + state.onPointerDownLon;
+    state.targetLat = (e.clientY - state.onPointerDownPointerY) * 0.15 + state.onPointerDownLat;
+  };
+
+  const handlePointerUp = () => {
+    const state = threeRef.current;
+    state.isUserInteracting = false;
+  };
+
+  // Scroll wheel to zoom in / out
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const state = threeRef.current;
+    if (!state.camera) return;
+
+    const fov = state.camera.fov + e.deltaY * 0.05;
+    state.camera.fov = THREE.MathUtils.clamp(fov, 35, 90);
+    state.camera.updateProjectionMatrix();
+  };
+
+  // Touch gesture handler for 2-finger pinch zoom
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    const state = threeRef.current;
+    if (e.touches.length === 2 && state.camera) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.hypot(dx, dy);
+
+      if (state.touchStartDistance > 0) {
+        const factor = state.touchStartDistance / dist;
+        const newFov = state.touchStartFov * factor;
+        state.camera.fov = THREE.MathUtils.clamp(newFov, 35, 90);
+        state.camera.updateProjectionMatrix();
+      } else {
+        state.touchStartDistance = dist;
+        state.touchStartFov = state.camera.fov;
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    const state = threeRef.current;
+    state.touchStartDistance = 0;
+  };
+
+  // User Actions
   const handleLaunchTour = () => {
     setHasTourError(false);
-    setIsIframeLoading(true);
     setIsTourLoaded(true);
   };
 
   const handleReload = () => {
     setHasTourError(false);
-    setIsIframeLoading(true);
-    setViewerKey((prev) => prev + 1);
+    initThreeViewer();
   };
 
   const handleCloseTour = () => {
+    cleanupThree();
     setIsTourLoaded(false);
-    setIsIframeLoading(false);
+    setIsViewerLoading(false);
     setHasTourError(false);
     setIsCssFullscreen(false);
   };
 
-  // Touch & Mouse Panning: standard pointerdown, pointermove, and pointerup handlers
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    isDraggingRef.current = true;
-    startPosRef.current = { x: e.clientX, y: e.clientY };
-
-    // Tap/Click activation: ensures viewer initializes or attaches its active render loop
-    if (!isTourLoaded) {
-      handleLaunchTour();
-    } else if (iframeRef.current) {
-      iframeRef.current.focus();
+  const handleResetOrientation = () => {
+    const state = threeRef.current;
+    state.targetLon = 0;
+    state.targetLat = 0;
+    if (state.camera) {
+      state.camera.fov = 75;
+      state.camera.updateProjectionMatrix();
     }
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDraggingRef.current) return;
-    // Panning delta tracking for orbit controls across devices (Mac, iPhone, PC, Android)
-    startPosRef.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const handlePointerUp = () => {
-    isDraggingRef.current = false;
   };
 
   const handleToggleFullscreen = useCallback(() => {
     if (!viewerContainerRef.current) return;
     const el = viewerContainerRef.current as any;
 
-    // Check if native Fullscreen API is supported on this element/device
     const isFullscreenApiSupported =
       !!el.requestFullscreen ||
       !!el.webkitRequestFullscreen ||
@@ -216,6 +429,16 @@ export const VirtualTourSection: React.FC = () => {
     // On iOS Safari / iPhone where div Fullscreen API does not exist, toggle CSS pseudo-fullscreen
     if (!isFullscreenApiSupported || isIOS) {
       setIsCssFullscreen((prev) => !prev);
+      setTimeout(() => {
+        const state = threeRef.current;
+        if (state.renderer && state.camera && viewerContainerRef.current) {
+          const w = viewerContainerRef.current.clientWidth;
+          const h = viewerContainerRef.current.clientHeight;
+          state.camera.aspect = w / h;
+          state.camera.updateProjectionMatrix();
+          state.renderer.setSize(w, h, false);
+        }
+      }, 100);
       return;
     }
 
@@ -279,6 +502,9 @@ export const VirtualTourSection: React.FC = () => {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
+            onWheel={handleWheel}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
             className={`relative w-full overflow-hidden bg-black flex flex-col transition-all duration-200 ${
               isCssFullscreen
                 ? "fixed inset-0 z-[9999] w-screen h-[100dvh] rounded-none p-0"
@@ -313,7 +539,10 @@ export const VirtualTourSection: React.FC = () => {
                     <button
                       type="button"
                       id="tour-reload-btn"
-                      onClick={handleReload}
+                      onClick={() => {
+                        handleResetOrientation();
+                        handleReload();
+                      }}
                       className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5"
                       title="Reset / Reload View"
                     >
@@ -377,7 +606,7 @@ export const VirtualTourSection: React.FC = () => {
 
             {/* Embedded Viewer or On-Demand Poster */}
             <div
-              className="relative flex-1 w-full h-full min-h-[460px] sm:min-h-[560px] bg-slate-950 overflow-hidden"
+              className="relative flex-1 w-full h-full min-h-[460px] sm:min-h-[560px] bg-slate-950 overflow-hidden select-none cursor-grab active:cursor-grabbing"
               style={{
                 WebkitOverflowScrolling: "touch",
                 touchAction: "none",
@@ -386,7 +615,7 @@ export const VirtualTourSection: React.FC = () => {
               {isTourLoaded ? (
                 <>
                   {/* Loading indicator */}
-                  {isIframeLoading && (
+                  {isViewerLoading && (
                     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-xs text-white gap-3 p-4 pointer-events-none">
                       <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
                       <p className="text-xs sm:text-sm text-slate-200 font-medium">
@@ -395,14 +624,14 @@ export const VirtualTourSection: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Error recovery card if WebKit memory or network fails */}
+                  {/* Error recovery card if WebGL context drops: does NOT auto-refresh page */}
                   {hasTourError ? (
                     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950 text-white p-6 text-center">
                       <div className="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4">
                         <RotateCcw className="w-7 h-7" />
                       </div>
                       <h4 className="text-base sm:text-lg font-bold text-white mb-2">
-                        Walkthrough Ready to Reload
+                        Tap to retry loading 360 view
                       </h4>
                       <p className="text-xs sm:text-sm text-slate-400 max-w-md mb-6 leading-relaxed">
                         Tap below to reload the 3D walkthrough with refreshed WebGL buffers.
@@ -426,32 +655,16 @@ export const VirtualTourSection: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    <iframe
-                      ref={iframeRef}
-                      key={viewerKey}
-                      id="viewer-frame"
-                      src={tourUrl}
-                      allow="autoplay; camera; display-capture; fullscreen; geolocation; microphone; picture-in-picture; xr-spatial-tracking; screen-wake-lock; vr; webxr"
-                      allowFullScreen={true}
-                      title="Cognitive Edge • Interactive 3D Digital Twin Demo"
-                      className="w-full h-full border-0 absolute inset-0"
-                      loading="eager"
-                      onLoad={() => {
-                        setIsIframeLoading(false);
-                        setHasTourError(false);
-                      }}
-                      onError={() => {
-                        setIsIframeLoading(false);
-                        setHasTourError(true);
-                      }}
+                    /* Native Low-Memory Three.js Canvas */
+                    <canvas
+                      ref={canvasRef}
+                      id="tour-webgl-canvas"
+                      className="w-full h-full block absolute inset-0 touch-none outline-none"
                       style={{
                         width: "100%",
                         height: "100%",
-                        minHeight: "460px",
-                        border: 0,
-                        display: "block",
                         touchAction: "none",
-                        WebkitOverflowScrolling: "touch",
+                        display: "block",
                       }}
                     />
                   )}
