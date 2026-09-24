@@ -8,6 +8,18 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>Cognitive Edge LTD | Intelligence Beyond Reality</title>
 
+    <!-- 360 Virtual Tour CSS Optimizations: Prevent accidental gesture refreshing on iOS & macOS Safari -->
+    <style>
+      #tour-viewer-container,
+      #viewer-frame,
+      .virtual-tour-iframe,
+      iframe[src*="viz.spaceviz.ai"] {
+        touch-action: manipulation !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+      }
+    </style>
+
     <!-- Global Early WebSocket & Error Shielding -->
     <script>
       (function () {
@@ -150,6 +162,76 @@
           },
           true
         );
+      })();
+    </script>
+
+    <!-- iOS Safari Motion & DeviceOrientation Permission Handler -->
+    <script>
+      (function () {
+        var motionPermissionGranted = false;
+
+        function requestIOSMotionPermissions() {
+          if (motionPermissionGranted) return;
+
+          try {
+            // iOS 13+ DeviceOrientationEvent permission request
+            if (
+              typeof window !== "undefined" &&
+              typeof window.DeviceOrientationEvent !== "undefined" &&
+              typeof window.DeviceOrientationEvent.requestPermission === "function"
+            ) {
+              window.DeviceOrientationEvent.requestPermission()
+                .then(function (permissionState) {
+                  if (permissionState === "granted") {
+                    motionPermissionGranted = true;
+                  }
+                })
+                .catch(function () {});
+            }
+
+            // iOS 13+ DeviceMotionEvent permission request
+            if (
+              typeof window !== "undefined" &&
+              typeof window.DeviceMotionEvent !== "undefined" &&
+              typeof window.DeviceMotionEvent.requestPermission === "function"
+            ) {
+              window.DeviceMotionEvent.requestPermission()
+                .then(function (motionState) {
+                  if (motionState === "granted") {
+                    motionPermissionGranted = true;
+                  }
+                })
+                .catch(function () {});
+            }
+          } catch (_) {}
+        }
+
+        // Attach touch and click listeners upon user interaction before or when interacting with the tour
+        var events = ["click", "touchstart", "touchend", "pointerdown"];
+        events.forEach(function (eventType) {
+          document.addEventListener(
+            eventType,
+            function (event) {
+              var target = event.target;
+              if (!target) return;
+              if (
+                (target.closest &&
+                  (target.closest("#virtual-tour") ||
+                    target.closest("#tour-viewer-container") ||
+                    target.closest(".virtual-tour-iframe") ||
+                    target.closest("iframe") ||
+                    target.closest("[id*='tour']"))) ||
+                (target.id && target.id.indexOf("tour") !== -1)
+              ) {
+                requestIOSMotionPermissions();
+              }
+            },
+            { passive: true, capture: true }
+          );
+        });
+
+        // Expose globally so React components and external triggers can call directly
+        window.requestTourMotionPermissions = requestIOSMotionPermissions;
       })();
     </script>
 

@@ -23,6 +23,14 @@
   }
 }
 
+#tour-viewer-container,
+#viewer-frame,
+.virtual-tour-iframe {
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
 /* Custom glow and grid utilities */
 .tech-grid-bg {
   background-size: 32px 32px;
@@ -56,12 +64,4 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-/* 360 Virtual Tour Canvas touch shielding for iOS & cross-browser panning */
-#tour-360-canvas {
-  touch-action: none !important;
-  -webkit-touch-callout: none !important;
-  -webkit-user-select: none !important;
-  user-select: none !important;
 }
