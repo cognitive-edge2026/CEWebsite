@@ -2,6 +2,7 @@ import touchKioskImg from "../assets/images/touch_kiosk_display_1789055717373.jp
 import tabletMobileImg from "../assets/images/tablet_mobile_spatial_1789055738910.jpg";
 import constructionBimImg from "../assets/images/construction_bim_vis_1789322528856.jpg";
 import webInteractiveImg from "../assets/images/regenerated_image_1790059284114.jpg";
+import architecturalVisImg from "../assets/images/regenerated_image_1790262507326.jpg";
 
 export interface ServiceItem {
   id: string;
@@ -224,7 +225,7 @@ export const WEBSITE_CONTENT = {
       description:
         "Photorealistic renders, master plan flythroughs, and interactive interiors — built from your architectural drawings before a single brick is laid. Used by India's leading developers to launch projects with confidence and close pre-construction inventory faster.",
       highlights: [],
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+      image: architecturalVisImg,
     },
     {
       id: "construction-design-visuallization",
