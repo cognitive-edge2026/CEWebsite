@@ -57,3 +57,11 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* 360 Virtual Tour Canvas touch shielding for iOS & cross-browser panning */
+#tour-360-canvas {
+  touch-action: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}

@@ -16,6 +16,10 @@ import {
 
 export const VirtualTourSection: React.FC = () => {
   const viewerContainerRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const isDraggingRef = useRef(false);
+  const startPosRef = useRef({ x: 0, y: 0 });
+
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isCssFullscreen, setIsCssFullscreen] = useState(false);
   const [viewerKey, setViewerKey] = useState(0);
@@ -82,36 +86,87 @@ export const VirtualTourSection: React.FC = () => {
     }
   }, [isCssFullscreen]);
 
-  // Request iOS 13+ device motion / gyroscope permissions within the direct user gesture
-  const requestIOSMotionPermissions = async () => {
-    try {
-      const DeviceOrientation = (window as any).DeviceOrientationEvent;
-      if (DeviceOrientation && typeof DeviceOrientation.requestPermission === "function") {
-        await DeviceOrientation.requestPermission();
-      }
-    } catch {
-      // Graceful fallback if user cancels or origin is restricted
-    }
+  // WebGL memory optimization for high-DPI Retina screens:
+  // Equivalent WebGL canvas optimization capping pixel ratio: renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-    try {
-      const DeviceMotion = (window as any).DeviceMotionEvent;
-      if (DeviceMotion && typeof DeviceMotion.requestPermission === "function") {
-        await DeviceMotion.requestPermission();
-      }
-    } catch {
-      // Graceful fallback
-    }
-  };
+    const maxPixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
-  const handleLaunchTour = async () => {
-    await requestIOSMotionPermissions();
+    // Provide global renderer optimization helper if Three.js / WebGL renderer is invoked
+    const configureRenderer = (renderer: any) => {
+      if (renderer && typeof renderer.setPixelRatio === "function") {
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      }
+    };
+    (window as any).__configureWebGLRenderer = configureRenderer;
+
+    const optimizeCanvas = (canvas: HTMLCanvasElement) => {
+      try {
+        if (canvas.dataset.retinaOptimized) return;
+        canvas.dataset.retinaOptimized = "true";
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          const targetWidth = Math.round(rect.width * maxPixelRatio);
+          const targetHeight = Math.round(rect.height * maxPixelRatio);
+          if (canvas.width > targetWidth || canvas.height > targetHeight) {
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+          }
+        }
+      } catch {
+        // Safe fallback
+      }
+    };
+
+    const container = viewerContainerRef.current;
+    if (container) {
+      container.querySelectorAll("canvas").forEach(optimizeCanvas);
+
+      const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          for (const node of Array.from(mutation.addedNodes)) {
+            if (node instanceof HTMLCanvasElement) {
+              optimizeCanvas(node);
+            } else if (node instanceof HTMLElement) {
+              node.querySelectorAll("canvas").forEach(optimizeCanvas);
+            }
+          }
+        }
+      });
+
+      observer.observe(container, { childList: true, subtree: true });
+      return () => {
+        observer.disconnect();
+        delete (window as any).__configureWebGLRenderer;
+      };
+    }
+  }, [viewerKey, isTourLoaded]);
+
+  // Handle WebGL context loss gracefully without crashing iOS tab
+  useEffect(() => {
+    const handleContextLost = (e: Event) => {
+      e.preventDefault();
+      setHasTourError(true);
+    };
+
+    const container = viewerContainerRef.current;
+    if (container) {
+      container.addEventListener("webglcontextlost", handleContextLost);
+      return () => {
+        container.removeEventListener("webglcontextlost", handleContextLost);
+      };
+    }
+  }, []);
+
+  // Tap/Click Activation: initializes or attaches active render loop
+  const handleLaunchTour = () => {
     setHasTourError(false);
     setIsIframeLoading(true);
     setIsTourLoaded(true);
   };
 
-  const handleReload = async () => {
-    await requestIOSMotionPermissions();
+  const handleReload = () => {
     setHasTourError(false);
     setIsIframeLoading(true);
     setViewerKey((prev) => prev + 1);
@@ -122,6 +177,29 @@ export const VirtualTourSection: React.FC = () => {
     setIsIframeLoading(false);
     setHasTourError(false);
     setIsCssFullscreen(false);
+  };
+
+  // Touch & Mouse Panning: standard pointerdown, pointermove, and pointerup handlers
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    isDraggingRef.current = true;
+    startPosRef.current = { x: e.clientX, y: e.clientY };
+
+    // Tap/Click activation: ensures viewer initializes or attaches its active render loop
+    if (!isTourLoaded) {
+      handleLaunchTour();
+    } else if (iframeRef.current) {
+      iframeRef.current.focus();
+    }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+    // Panning delta tracking for orbit controls across devices (Mac, iPhone, PC, Android)
+    startPosRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handlePointerUp = () => {
+    isDraggingRef.current = false;
   };
 
   const handleToggleFullscreen = useCallback(() => {
@@ -197,6 +275,10 @@ export const VirtualTourSection: React.FC = () => {
           <div
             ref={viewerContainerRef}
             id="tour-viewer-container"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
             className={`relative w-full overflow-hidden bg-black flex flex-col transition-all duration-200 ${
               isCssFullscreen
                 ? "fixed inset-0 z-[9999] w-screen h-[100dvh] rounded-none p-0"
@@ -204,6 +286,7 @@ export const VirtualTourSection: React.FC = () => {
             }`}
             style={{
               minHeight: isCssFullscreen ? "100dvh" : "480px",
+              touchAction: "none",
             }}
           >
             {/* Top Branding Bar */}
@@ -297,6 +380,7 @@ export const VirtualTourSection: React.FC = () => {
               className="relative flex-1 w-full h-full min-h-[460px] sm:min-h-[560px] bg-slate-950 overflow-hidden"
               style={{
                 WebkitOverflowScrolling: "touch",
+                touchAction: "none",
               }}
             >
               {isTourLoaded ? (
@@ -343,10 +427,11 @@ export const VirtualTourSection: React.FC = () => {
                     </div>
                   ) : (
                     <iframe
+                      ref={iframeRef}
                       key={viewerKey}
                       id="viewer-frame"
                       src={tourUrl}
-                      allow="accelerometer; autoplay; camera; display-capture; fullscreen; geolocation; gyroscope; magnetometer; microphone; picture-in-picture; xr-spatial-tracking; screen-wake-lock; vr; webxr"
+                      allow="autoplay; camera; display-capture; fullscreen; geolocation; microphone; picture-in-picture; xr-spatial-tracking; screen-wake-lock; vr; webxr"
                       allowFullScreen={true}
                       title="Cognitive Edge • Interactive 3D Digital Twin Demo"
                       className="w-full h-full border-0 absolute inset-0"
@@ -365,14 +450,20 @@ export const VirtualTourSection: React.FC = () => {
                         minHeight: "460px",
                         border: 0,
                         display: "block",
-                        touchAction: "manipulation",
+                        touchAction: "none",
                         WebkitOverflowScrolling: "touch",
                       }}
                     />
                   )}
                 </>
               ) : (
-                <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-black p-6 text-center">
+                <div
+                  onClick={handleLaunchTour}
+                  className="relative w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-black p-6 text-center cursor-pointer select-none"
+                  style={{
+                    touchAction: "none",
+                  }}
+                >
                   {/* High-res architectural backdrop image */}
                   <img
                     src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
@@ -397,7 +488,10 @@ export const VirtualTourSection: React.FC = () => {
                       <button
                         type="button"
                         id="tour-launch-main-btn"
-                        onClick={handleLaunchTour}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLaunchTour();
+                        }}
                         className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
                       >
                         <Play className="w-4 h-4 fill-current" />
