@@ -222,12 +222,8 @@ export const WEBSITE_CONTENT = {
       badge: "Ultra 8K Stills",
       subtitle: "Photorealistic exterior and interior architectural CGI renderings",
       description:
-        "Produce breathtaking architectural CGI stills that communicate design intent with pristine clarity. We simulate exact geographical sun angles, atmospheric lighting conditions, physical material properties, and landscaping to captivate buyers.",
-      highlights: [
-        "Accurate sun studies & twilight lighting",
-        "Ultra 8K resolution for billboard & print",
-        "Physically based shaders matching vendor specs",
-      ],
+        "Photorealistic renders, master plan flythroughs, and interactive interiors — built from your architectural drawings before a single brick is laid. Used by India's leading developers to launch projects with confidence and close pre-construction inventory faster.",
+      highlights: [],
       image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
     },
     {
