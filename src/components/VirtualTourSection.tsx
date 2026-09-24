@@ -197,8 +197,6 @@ export const VirtualTourSection: React.FC = () => {
           <div
             ref={viewerContainerRef}
             id="tour-viewer-container"
-            onClick={requestIOSMotionPermissions}
-            onTouchStart={requestIOSMotionPermissions}
             className={`relative w-full overflow-hidden bg-black flex flex-col transition-all duration-200 ${
               isCssFullscreen
                 ? "fixed inset-0 z-[9999] w-screen h-[100dvh] rounded-none p-0"
@@ -348,10 +346,10 @@ export const VirtualTourSection: React.FC = () => {
                       key={viewerKey}
                       id="viewer-frame"
                       src={tourUrl}
-                      allow="fullscreen; vr; xr; webxr; accelerometer; gyroscope; magnetometer; device-orientation; device-motion"
+                      allow="accelerometer; autoplay; camera; display-capture; fullscreen; geolocation; gyroscope; magnetometer; microphone; picture-in-picture; xr-spatial-tracking; screen-wake-lock; vr; webxr"
                       allowFullScreen={true}
                       title="Cognitive Edge • Interactive 3D Digital Twin Demo"
-                      className="w-full h-full border-0 absolute inset-0 virtual-tour-iframe"
+                      className="w-full h-full border-0 absolute inset-0"
                       loading="eager"
                       onLoad={() => {
                         setIsIframeLoading(false);
@@ -369,7 +367,6 @@ export const VirtualTourSection: React.FC = () => {
                         display: "block",
                         touchAction: "manipulation",
                         WebkitOverflowScrolling: "touch",
-                        overscrollBehavior: "contain",
                       }}
                     />
                   )}

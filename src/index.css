@@ -23,14 +23,6 @@
   }
 }
 
-#tour-viewer-container,
-#viewer-frame,
-.virtual-tour-iframe {
-  touch-action: manipulation;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-}
-
 /* Custom glow and grid utilities */
 .tech-grid-bg {
   background-size: 32px 32px;
