@@ -22,11 +22,20 @@ export const VirtualTourSection: React.FC = () => {
   const [isTourLoaded, setIsTourLoaded] = useState(false);
   const [isIframeLoading, setIsIframeLoading] = useState(false);
   const [hasTourError, setHasTourError] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+  const [isIOS, setIsIOS] = useState(() => {
+    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+      return (
+        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && (navigator.maxTouchPoints > 1 || "ontouchend" in document))
+      );
+    }
+    return false;
+  });
+  const [iosDirectOpened, setIosDirectOpened] = useState(false);
 
   const tourUrl = "https://viz.spaceviz.ai/mhxp-dev/SanjeeviniTheBerriesForBirds.mhx/225/index.html";
 
-  // Detect iOS / iPadOS / WebKit devices for specific optimizations
+  // Double-check iOS device on mount
   useEffect(() => {
     if (typeof window !== "undefined" && typeof navigator !== "undefined") {
       const isApple =
@@ -82,46 +91,58 @@ export const VirtualTourSection: React.FC = () => {
     }
   }, [isCssFullscreen]);
 
-  // Request iOS 13+ device motion / gyroscope permissions within the direct user gesture
-  const requestIOSMotionPermissions = async () => {
-    try {
-      const DeviceOrientation = (window as any).DeviceOrientationEvent;
-      if (DeviceOrientation && typeof DeviceOrientation.requestPermission === "function") {
-        await DeviceOrientation.requestPermission();
-      }
-    } catch {
-      // Graceful fallback if user cancels or origin is restricted
+  const handleLaunchTour = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
 
-    try {
-      const DeviceMotion = (window as any).DeviceMotionEvent;
-      if (DeviceMotion && typeof DeviceMotion.requestPermission === "function") {
-        await DeviceMotion.requestPermission();
-      }
-    } catch {
-      // Graceful fallback
+    if (isIOS) {
+      // In Apple iOS Safari, loading a heavy WebGL 3D virtual tour inside an inline iframe
+      // causes WebKit tab memory exhaustion (jetsam) or top-navigation attempts,
+      // which crashes the WebContent process and reloads the entire parent webpage.
+      // Launching directly in a dedicated tab runs the 3D tour in its own memory space
+      // with full 60fps WebGL and native gyro navigation, completely preventing the webpage from reloading.
+      window.open(tourUrl, "_blank", "noopener,noreferrer");
+      setIosDirectOpened(true);
+      return;
     }
-  };
 
-  const handleLaunchTour = async () => {
-    await requestIOSMotionPermissions();
     setHasTourError(false);
     setIsIframeLoading(true);
     setIsTourLoaded(true);
   };
 
-  const handleReload = async () => {
-    await requestIOSMotionPermissions();
+  const handleForceInlineTour = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setHasTourError(false);
+    setIsIframeLoading(true);
+    setIsTourLoaded(true);
+  };
+
+  const handleReload = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setHasTourError(false);
     setIsIframeLoading(true);
     setViewerKey((prev) => prev + 1);
   };
 
-  const handleCloseTour = () => {
+  const handleCloseTour = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setIsTourLoaded(false);
     setIsIframeLoading(false);
     setHasTourError(false);
     setIsCssFullscreen(false);
+    setIosDirectOpened(false);
   };
 
   const handleToggleFullscreen = useCallback(() => {
@@ -352,6 +373,7 @@ export const VirtualTourSection: React.FC = () => {
                           node.setAttribute("webkit-playsinline", "true");
                         }
                       }}
+                      sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation allow-downloads"
                       allow="accelerometer; autoplay; camera; display-capture; fullscreen; geolocation; gyroscope; magnetometer; microphone; picture-in-picture; xr-spatial-tracking; screen-wake-lock; vr; webxr"
                       allowFullScreen={true}
                       title="Cognitive Edge • Interactive 3D Digital Twin Demo"
@@ -391,25 +413,61 @@ export const VirtualTourSection: React.FC = () => {
 
                   {/* Centered Launch Call-to-Action */}
                   <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-blue-600/90 text-white flex items-center justify-center shadow-2xl mb-5 ring-4 ring-blue-500/20">
-                      <Compass className="w-8 h-8 sm:w-10 sm:h-10 text-white animate-pulse" />
-                    </div>
+                    {iosDirectOpened ? (
+                      <>
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-emerald-600/90 text-white flex items-center justify-center shadow-2xl mb-5 ring-4 ring-emerald-500/20">
+                          <ExternalLink className="w-8 h-8 sm:w-10 sm:h-10 text-white animate-pulse" />
+                        </div>
 
-                    <p className="text-sm sm:text-base text-slate-300 leading-relaxed mb-6 max-w-md">
-                      Interactive 3D Digital Twin & spatial walkthrough. Explore all rooms, architectural floor nodes, and high-fidelity textures.
-                    </p>
+                        <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                          360° Virtual Tour Active
+                        </h3>
 
-                    <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                      <button
-                        type="button"
-                        id="tour-launch-main-btn"
-                        onClick={handleLaunchTour}
-                        className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
-                      >
-                        <Play className="w-4 h-4 fill-current" />
-                        <span>Launch 360° Virtual Tour</span>
-                      </button>
-                    </div>
+                        <p className="text-sm sm:text-base text-slate-300 leading-relaxed mb-6 max-w-md">
+                          Opened in dedicated viewer to protect Safari WebKit memory and ensure smooth 60 FPS performance.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                          <button
+                            type="button"
+                            onClick={handleLaunchTour}
+                            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            <span>Reopen 360° Tour</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleForceInlineTour}
+                            className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white font-medium text-xs transition-colors cursor-pointer"
+                          >
+                            <span>Load inline player</span>
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-blue-600/90 text-white flex items-center justify-center shadow-2xl mb-5 ring-4 ring-blue-500/20">
+                          <Compass className="w-8 h-8 sm:w-10 sm:h-10 text-white animate-pulse" />
+                        </div>
+
+                        <p className="text-sm sm:text-base text-slate-300 leading-relaxed mb-6 max-w-md">
+                          Interactive 3D Digital Twin & spatial walkthrough. Explore all rooms, architectural floor nodes, and high-fidelity textures.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                          <button
+                            type="button"
+                            id="tour-launch-main-btn"
+                            onClick={handleLaunchTour}
+                            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+                          >
+                            <Play className="w-4 h-4 fill-current" />
+                            <span>Launch 360° Virtual Tour</span>
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               )}
