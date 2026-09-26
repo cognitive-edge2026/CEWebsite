@@ -346,6 +346,12 @@ export const VirtualTourSection: React.FC = () => {
                       key={viewerKey}
                       id="viewer-frame"
                       src={tourUrl}
+                      ref={(node) => {
+                        if (node) {
+                          node.setAttribute("playsinline", "true");
+                          node.setAttribute("webkit-playsinline", "true");
+                        }
+                      }}
                       allow="accelerometer; autoplay; camera; display-capture; fullscreen; geolocation; gyroscope; magnetometer; microphone; picture-in-picture; xr-spatial-tracking; screen-wake-lock; vr; webxr"
                       allowFullScreen={true}
                       title="Cognitive Edge • Interactive 3D Digital Twin Demo"
