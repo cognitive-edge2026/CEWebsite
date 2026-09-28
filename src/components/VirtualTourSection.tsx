@@ -200,11 +200,11 @@ export const VirtualTourSection: React.FC = () => {
   return (
     <section
       id="virtual-tour"
-      className="py-16 md:py-24 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 transition-colors"
+      className="py-12 sm:py-16 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 transition-colors"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <h2
             id="virtual-tour-heading"
             className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight"
@@ -214,7 +214,7 @@ export const VirtualTourSection: React.FC = () => {
         </div>
 
         {/* Interactive Viewer Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-3 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-2.5 sm:p-4 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
           {/* Viewer Container with dark branding chrome */}
           <div
             ref={viewerContainerRef}
@@ -222,10 +222,10 @@ export const VirtualTourSection: React.FC = () => {
             className={`relative w-full overflow-hidden bg-black flex flex-col transition-all duration-200 ${
               isCssFullscreen
                 ? "fixed inset-0 z-[9999] w-screen h-[100dvh] rounded-none p-0"
-                : "rounded-2xl h-[520px] sm:h-[620px] md:h-[720px] lg:h-[780px]"
+                : "rounded-xl h-[460px] sm:h-[540px] md:h-[620px] lg:h-[680px]"
             }`}
             style={{
-              minHeight: isCssFullscreen ? "100dvh" : "480px",
+              minHeight: isCssFullscreen ? "100dvh" : "440px",
             }}
           >
             {/* Top Branding Bar */}

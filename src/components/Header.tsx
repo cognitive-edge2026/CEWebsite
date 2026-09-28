@@ -37,6 +37,31 @@ export const Header: React.FC<HeaderProps> = ({
   const [credentialsDropdownOpen, setCredentialsDropdownOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("hero");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const quickNavRef = useRef<HTMLElement>(null);
+
+  // Mobile Header Auto-Scroll state & refs
+  const [isInteracting, setIsInteracting] = useState(false);
+  const isInteractingRef = useRef(false);
+  const scrollDirectionRef = useRef<"forward" | "backward">("forward");
+  const isWaitingRef = useRef(false);
+  const waitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const userTouchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    isInteractingRef.current = isInteracting;
+  }, [isInteracting]);
+
+  const handleTouchStart = () => {
+    if (userTouchTimeoutRef.current) clearTimeout(userTouchTimeoutRef.current);
+    setIsInteracting(true);
+  };
+
+  const handleTouchEnd = () => {
+    if (userTouchTimeoutRef.current) clearTimeout(userTouchTimeoutRef.current);
+    userTouchTimeoutRef.current = setTimeout(() => {
+      setIsInteracting(false);
+    }, 3500);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,6 +114,96 @@ export const Header: React.FC<HeaderProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // 1. Auto-scroll mobile quick-nav to keep the active section in view as user scrolls the website
+  useEffect(() => {
+    const container = quickNavRef.current;
+    if (!container) return;
+
+    if (activeSection === "hero" && currentPage === "home") {
+      container.scrollTo({
+        left: 0,
+        behavior: "smooth",
+      });
+      return;
+    }
+
+    const activeBtn = container.querySelector<HTMLElement>('[data-active="true"]');
+    if (activeBtn) {
+      const containerRect = container.getBoundingClientRect();
+      const btnRect = activeBtn.getBoundingClientRect();
+      const currentScrollLeft = container.scrollLeft;
+      const targetScrollLeft =
+        currentScrollLeft +
+        (btnRect.left - containerRect.left) -
+        containerRect.width / 2 +
+        btnRect.width / 2;
+
+      container.scrollTo({
+        left: Math.max(0, targetScrollLeft),
+        behavior: "smooth",
+      });
+    }
+  }, [activeSection, currentPage]);
+
+  // 2. Ambient auto-scroll on mobile when at the top so all sections are displayed
+  useEffect(() => {
+    if (activeSection !== "hero" || isInteracting || currentPage !== "home") {
+      return;
+    }
+
+    let animationFrameId: number;
+    let lastTimestamp = performance.now();
+
+    const step = (now: number) => {
+      const delta = now - lastTimestamp;
+      lastTimestamp = now;
+
+      const container = quickNavRef.current;
+      if (
+        container &&
+        container.offsetParent !== null &&
+        !isInteractingRef.current &&
+        !isWaitingRef.current
+      ) {
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        if (maxScroll > 2) {
+          const speed = 0.035 * delta;
+          if (scrollDirectionRef.current === "forward") {
+            if (container.scrollLeft >= maxScroll - 3) {
+              isWaitingRef.current = true;
+              if (waitTimeoutRef.current) clearTimeout(waitTimeoutRef.current);
+              waitTimeoutRef.current = setTimeout(() => {
+                scrollDirectionRef.current = "backward";
+                isWaitingRef.current = false;
+              }, 2000);
+            } else {
+              container.scrollLeft += speed;
+            }
+          } else {
+            if (container.scrollLeft <= 3) {
+              isWaitingRef.current = true;
+              if (waitTimeoutRef.current) clearTimeout(waitTimeoutRef.current);
+              waitTimeoutRef.current = setTimeout(() => {
+                scrollDirectionRef.current = "forward";
+                isWaitingRef.current = false;
+              }, 2000);
+            } else {
+              container.scrollLeft -= speed * 1.5;
+            }
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(step);
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (waitTimeoutRef.current) clearTimeout(waitTimeoutRef.current);
+    };
+  }, [activeSection, isInteracting, currentPage]);
+
   const credentialSubOptions = [
     {
       id: "vr-walkthrough" as CredentialOptionId,
@@ -134,6 +249,35 @@ export const Header: React.FC<HeaderProps> = ({
     optionId?: CredentialOptionId
   ) => {
     e.preventDefault();
+
+    // Pause ambient auto-scroll when user interacts with nav pills
+    setIsInteracting(true);
+    if (userTouchTimeoutRef.current) clearTimeout(userTouchTimeoutRef.current);
+    userTouchTimeoutRef.current = setTimeout(() => {
+      setIsInteracting(false);
+    }, 3500);
+
+    // Smoothly center the clicked button in the quick-nav bar
+    const container = quickNavRef.current;
+    if (container) {
+      const targetBtn = container.querySelector<HTMLElement>(`[data-section="${link.sectionId}"]`);
+      if (targetBtn) {
+        const containerRect = container.getBoundingClientRect();
+        const btnRect = targetBtn.getBoundingClientRect();
+        const currentScrollLeft = container.scrollLeft;
+        const targetScrollLeft =
+          currentScrollLeft +
+          (btnRect.left - containerRect.left) -
+          containerRect.width / 2 +
+          btnRect.width / 2;
+
+        container.scrollTo({
+          left: Math.max(0, targetScrollLeft),
+          behavior: "smooth",
+        });
+      }
+    }
+
     if (link.sectionId === "credentials") {
       setCredentialsDropdownOpen(false);
       setMobileMenuOpen(false);
@@ -187,8 +331,8 @@ export const Header: React.FC<HeaderProps> = ({
           <Logo size="sm" showTagline={true} />
         </a>
 
-        {/* Desktop & Laptop Navigation - Always visible on screens >= 1024px */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 2xl:gap-3" id="desktop-navbar">
+        {/* Desktop & Laptop Navigation - Active in desktop mode (screens >= 1024px / lg) */}
+        <nav className="hidden lg:flex items-center gap-0.5 lg:gap-1.5 xl:gap-2.5 2xl:gap-3" id="desktop-navbar">
           {navLinks.map((link) => {
             const isCredentials = link.sectionId === "credentials";
             const isActive = isCredentials
@@ -207,7 +351,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     onClick={(e) => handleNavClick(e, link)}
                     id="nav-link-our-credentials"
-                    className={`inline-flex items-center gap-1 text-[14px] font-semibold px-2 xl:px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                    className={`inline-flex items-center gap-0.5 lg:gap-1 text-[13px] xl:text-[14px] font-semibold px-1.5 lg:px-2 xl:px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                       isActive || credentialsDropdownOpen
                         ? "bg-blue-600 text-white shadow-xs"
                         : "text-slate-700 hover:text-blue-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-slate-800/80"
@@ -274,7 +418,7 @@ export const Header: React.FC<HeaderProps> = ({
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link)}
                 id={`nav-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-                className={`text-[14px] font-semibold px-2 xl:px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
+                className={`text-[13px] xl:text-[14px] font-semibold px-1.5 lg:px-2 xl:px-2.5 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                   isActive
                     ? "bg-blue-600 text-white shadow-xs"
                     : "text-slate-700 hover:text-blue-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:text-blue-400 dark:hover:bg-slate-800/80"
@@ -303,11 +447,11 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Menu Toggle Button - Strictly hidden in desktop mode */}
           <button
             id="mobile-menu-toggle-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 cursor-pointer"
+            className="md:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 cursor-pointer"
             aria-label="Toggle mobile navigation"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -315,39 +459,57 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Mobile/Tablet Quick-Nav Bar - Header options visible at all times across devices */}
-      <nav
-        id="mobile-quick-nav-bar"
-        aria-label="Quick Navigation"
-        className="lg:hidden w-full overflow-x-auto no-scrollbar border-t border-slate-200/60 dark:border-slate-800/60 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-3 py-1.5 flex items-center gap-1.5 mt-1"
-      >
-        {navLinks.map((link) => {
-          const isCredentials = link.sectionId === "credentials";
-          const isActive = isCredentials
-            ? currentPage === "credentials"
-            : currentPage === "home" && activeSection === link.sectionId;
+      {/* Mobile & Tablet Quick-Nav Bar with Auto-Scroll - Active on mobile and tablet (screens < 1024px) */}
+      <div className="relative lg:hidden w-full border-t border-slate-200/60 dark:border-slate-800/60 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md mt-1">
+        {/* Left Edge Fade Hint */}
+        <div className="absolute left-0 top-0 bottom-0 w-3 sm:w-4 bg-gradient-to-r from-white dark:from-slate-900 to-transparent pointer-events-none z-10 opacity-70" />
+        {/* Right Edge Fade Hint */}
+        <div className="absolute right-0 top-0 bottom-0 w-4 sm:w-6 bg-gradient-to-l from-white dark:from-slate-900 to-transparent pointer-events-none z-10 opacity-70" />
 
-          return (
-            <button
-              key={`quick-${link.href}`}
-              onClick={(e) => handleNavClick(e, link)}
-              className={`px-3 py-1 rounded-full whitespace-nowrap transition-colors shrink-0 text-[14px] font-semibold cursor-pointer ${
-                isActive
-                  ? "bg-blue-600 text-white shadow-xs"
-                  : "bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-cyan-400"
-              }`}
-            >
-              {link.label}
-            </button>
-          );
-        })}
-      </nav>
+        <nav
+          id="mobile-quick-nav-bar"
+          ref={quickNavRef}
+          aria-label="Quick Navigation"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+          onPointerDown={handleTouchStart}
+          onPointerUp={handleTouchEnd}
+          onWheel={handleTouchStart}
+          onMouseEnter={handleTouchStart}
+          onMouseLeave={handleTouchEnd}
+          className="w-full overflow-x-auto no-scrollbar px-3 sm:px-4 py-1.5 flex items-center gap-1.5 sm:gap-2 md:gap-2.5 scroll-smooth select-none"
+        >
+          {navLinks.map((link) => {
+            const isCredentials = link.sectionId === "credentials";
+            const isActive = isCredentials
+              ? currentPage === "credentials"
+              : currentPage === "home" && activeSection === link.sectionId;
+
+            return (
+              <button
+                key={`quick-${link.href}`}
+                data-active={isActive ? "true" : "false"}
+                data-section={link.sectionId}
+                onClick={(e) => handleNavClick(e, link)}
+                className={`px-3 sm:px-3.5 md:px-4 py-1 sm:py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0 text-[13px] sm:text-[14px] font-semibold cursor-pointer ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-cyan-400"
+                }`}
+              >
+                {link.label}
+              </button>
+            );
+          })}
+        </nav>
+      </div>
 
       {/* Mobile Slide-Down Menu */}
       {mobileMenuOpen && (
         <div
           id="mobile-nav-drawer"
-          className="lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 shadow-xl"
+          className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 shadow-xl"
         >
           <div className="flex flex-col gap-1">
             {navLinks.map((link) => {

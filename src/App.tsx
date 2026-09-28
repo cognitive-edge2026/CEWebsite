@@ -216,7 +216,7 @@ export function App() {
 
         {/* Dynamic View: Dedicated Credentials Page or Full Home Experience */}
         {currentPage === "credentials" ? (
-          <div className="pt-24 sm:pt-28 lg:pt-20 flex-1">
+          <div className="pt-24 lg:pt-16 flex-1">
             <CredentialsPage
               initialOption={credentialsOption}
               onBackToHome={() => navigateToHome()}
@@ -228,7 +228,7 @@ export function App() {
         ) : (
           <>
             {/* Main Content Sections */}
-            <main className="relative pt-24 sm:pt-28 lg:pt-20 flex-1">
+            <main className="relative pt-24 lg:pt-16 flex-1">
               {/* 1. Hero Section */}
               <Hero />
 

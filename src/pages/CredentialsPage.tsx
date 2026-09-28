@@ -130,10 +130,10 @@ export const CredentialsPage: React.FC<CredentialsPageProps> = ({
           <div className="mt-6 sm:mt-0 shrink-0">
             <button
               onClick={onBackToHome}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-2xs"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Return to Main Site</span>
+              <span>Back to the homepage</span>
             </button>
           </div>
         </div>

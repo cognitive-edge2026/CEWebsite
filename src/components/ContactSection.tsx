@@ -200,50 +200,46 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
   return (
     <section
       id="contact"
-      className="py-16 md:py-24 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors"
+      className="py-12 sm:py-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <h2
             id="contact-heading"
             className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight"
           >
             Contact Cognitive Edge
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300">
+          <p className="mt-2.5 text-base sm:text-lg text-slate-600 dark:text-slate-300">
             Ready to experience your building plans in interactive 3D virtual reality? Connect with our spatial computing team today.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column: Direct Info Cards */}
-          <div
-            className="lg:col-span-5 flex flex-col justify-between space-y-6"
-          >
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-4 sm:space-y-5">
             <div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-3">
                 Let's Build Something Extraordinary
               </h3>
-              <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-8">
+              <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-5">
                 Whether you have an upcoming multi-family development, custom luxury home, or commercial complex, our team provides 1:1 blueprint conversion into photorealistic digital twins and VR walkthroughs.
               </p>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {/* Phone Card */}
                 <a
                   href={`tel:${WEBSITE_CONTENT.brand.phoneRaw}`}
                   id="contact-phone-card"
-                  className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all group"
+                  className="flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all group"
                 >
-                  <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-950/80 text-blue-600 dark:text-cyan-400 group-hover:scale-105 transition-transform">
-                    <Phone className="w-5 h-5" />
+                  <div className="p-2.5 rounded-xl bg-blue-100 dark:bg-blue-950/80 text-blue-600 dark:text-cyan-400 group-hover:scale-105 transition-transform">
+                    <Phone className="w-4 h-4" />
                   </div>
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Direct Phone</p>
-                    <p className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
+                    <p className="text-sm sm:text-base font-bold text-slate-900 dark:text-white mt-0.5">
                       {WEBSITE_CONTENT.brand.phone}
                     </p>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Direct line for project inquiries</p>
@@ -254,14 +250,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                 <a
                   href={`mailto:${WEBSITE_CONTENT.brand.salesEmail}`}
                   id="contact-sales-email-card"
-                  className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all group"
+                  className="flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all group"
                 >
-                  <div className="p-3 rounded-xl bg-orange-100 dark:bg-orange-950/80 text-orange-600 dark:text-orange-400 group-hover:scale-105 transition-transform">
-                    <Mail className="w-5 h-5" />
+                  <div className="p-2.5 rounded-xl bg-orange-100 dark:bg-orange-950/80 text-orange-600 dark:text-orange-400 group-hover:scale-105 transition-transform">
+                    <Mail className="w-4 h-4" />
                   </div>
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Sales Inquiries</p>
-                    <p className="text-base font-bold text-slate-900 dark:text-white mt-0.5 uppercase">
+                    <p className="text-sm sm:text-base font-bold text-slate-900 dark:text-white mt-0.5 uppercase">
                       {WEBSITE_CONTENT.brand.salesEmail}
                     </p>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Custom proposals & project scopes</p>
@@ -272,17 +268,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
                 <a
                   href={`mailto:${WEBSITE_CONTENT.brand.enquiryEmail}`}
                   id="contact-info-email-card"
-                  className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all group"
+                  className="flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all group"
                 >
-                  <div className="p-3 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
-                    <Mail className="w-5 h-5" />
+                  <div className="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
+                    <Mail className="w-4 h-4" />
                   </div>
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">General Information</p>
-                    <p className="text-base font-bold text-slate-900 dark:text-white mt-0.5 uppercase">
+                    <p className="text-sm sm:text-base font-bold text-slate-900 dark:text-white mt-0.5 uppercase">
                       {WEBSITE_CONTENT.brand.enquiryEmail}
                     </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                       Alternative:{" "}
                       <span className="font-semibold text-slate-700 dark:text-slate-300 lowercase">
                         {WEBSITE_CONTENT.brand.altEmail}
@@ -294,20 +290,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ prefilledService
             </div>
 
             {/* Brand Motto */}
-            <div className="p-5 rounded-2xl bg-blue-600 text-white shadow-md flex items-center gap-3.5">
-              <Sparkles className="w-5 h-5 text-amber-300 shrink-0" />
-              <p className="text-sm sm:text-base font-semibold text-white tracking-wide">
+            <div className="p-4 sm:p-4.5 rounded-xl bg-blue-600 text-white shadow-xs flex items-center gap-3">
+              <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
+              <p className="text-xs sm:text-sm font-semibold text-white tracking-wide">
                 Across all 50 states, we turn every experience into your competitive advantage
               </p>
             </div>
           </div>
 
           {/* Right Column: Contact Form with Name, Company Name, State, City dropdowns */}
-          <div
-            className="lg:col-span-7"
-          >
-            <div className="bg-slate-50 dark:bg-slate-950/80 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-lg">
-              <form onSubmit={handleSubmit} className="space-y-6" id="cognitive-edge-contact-form">
+          <div className="lg:col-span-7">
+            <div className="bg-slate-50 dark:bg-slate-950/80 rounded-2xl p-5 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-sm">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-4.5" id="cognitive-edge-contact-form">
                 {/* Row 1: Name and Company Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>

@@ -23,8 +23,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCredentialsPage }) => {
       id="main-footer"
       className="bg-slate-900 text-slate-300 border-t border-slate-800 transition-colors"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
           {/* Column 1: Brand & Bio */}
           <div className="lg:col-span-5 flex flex-col items-start">
             <a href="#hero" className="mb-4">
@@ -150,7 +150,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCredentialsPage }) => {
         </div>
 
         {/* Bottom Copyright & Back-to-Top */}
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>{WEBSITE_CONTENT.brand.copyright}</p>
           <div className="flex items-center gap-6">
             <span>Intelligence Beyond Reality</span>
