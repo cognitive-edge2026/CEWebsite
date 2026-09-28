@@ -13,6 +13,7 @@ import {
   ExternalLink,
   Loader2,
 } from "lucide-react";
+import tourBackdropImg from "../assets/images/regenerated_image_1790531247581.jpg";
 
 export const VirtualTourSection: React.FC = () => {
   const viewerContainerRef = useRef<HTMLDivElement>(null);
@@ -403,7 +404,7 @@ export const VirtualTourSection: React.FC = () => {
                 <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-black p-6 text-center">
                   {/* High-res architectural backdrop image */}
                   <img
-                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+                    src={tourBackdropImg}
                     alt="Cognitive Edge 3D Villa Digital Twin Walkthrough"
                     className="absolute inset-0 w-full h-full object-cover opacity-35"
                     loading="lazy"

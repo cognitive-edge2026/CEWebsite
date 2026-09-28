@@ -106,13 +106,18 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
 
                     {/* Bullet Highlights */}
                     {service.highlights && service.highlights.length > 0 && (
-                      <div className="space-y-2.5 mb-5 pt-3.5 border-t border-slate-200/70 dark:border-slate-800/80 min-h-[9.5rem] flex flex-col justify-start mt-auto text-[14px]">
-                        {service.highlights.map((highlight) => (
-                          <div key={highlight} className="flex items-start gap-2 text-[14px] text-slate-700 dark:text-slate-300 min-h-[2.6rem]">
-                            <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                            <span className="text-[14px] leading-snug">{highlight}</span>
-                          </div>
-                        ))}
+                      <div className="mb-5 pt-3.5 border-t border-slate-200/70 dark:border-slate-800/80 min-h-[10.5rem] flex flex-col justify-start mt-auto">
+                        <h4 className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400 mb-2.5">
+                          WHAT WE DELIVER
+                        </h4>
+                        <div className="space-y-2.5 text-[14px]">
+                          {service.highlights.map((highlight) => (
+                            <div key={highlight} className="flex items-start gap-2 text-[14px] text-slate-700 dark:text-slate-300 min-h-[2.6rem]">
+                              <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                              <span className="text-[14px] leading-snug">{highlight}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>

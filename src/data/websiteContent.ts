@@ -3,6 +3,8 @@ import tabletMobileImg from "../assets/images/tablet_mobile_spatial_178905573891
 import constructionBimImg from "../assets/images/construction_bim_vis_1789322528856.jpg";
 import webInteractiveImg from "../assets/images/regenerated_image_1790059284114.jpg";
 import architecturalVisImg from "../assets/images/regenerated_image_1790262507326.jpg";
+import digitalTwinsImg from "../assets/images/regenerated_image_1790531249811.jpg";
+import virtualTours360Img from "../assets/images/regenerated_image_1790531713033.jpg";
 
 export interface ServiceItem {
   id: string;
@@ -126,7 +128,7 @@ export const WEBSITE_CONTENT = {
         "Interactive spatial navigation & measurements",
         "Accurate physical materiality & lighting simulations",
       ],
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      image: digitalTwinsImg,
     },
     {
       id: "vr-experiences",
@@ -212,9 +214,11 @@ export const WEBSITE_CONTENT = {
       description:
         "Deliver frictionless, high-resolution panoramic walkthroughs that load instantly on any web browser or mobile device without apps or plugins. Features interactive hotspots, floor plan minimaps, embedded audio narration, and lead capture forms.",
       highlights: [
-        "Zero-installation WebGL/WebXR streaming",
+        "Sales without flights",
+        "Channel Partner reach",
+        "Works on every device",
       ],
-      image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
+      image: virtualTours360Img,
     },
     {
       id: "architectural-visuallization",
@@ -224,7 +228,11 @@ export const WEBSITE_CONTENT = {
       subtitle: "Photorealistic exterior and interior architectural CGI renderings",
       description:
         "Photorealistic renders, master plan flythroughs, and interactive interiors — built from your architectural drawings before a single brick is laid. Used by India's leading developers to launch projects with confidence and close pre-construction inventory faster.",
-      highlights: [],
+      highlights: [
+        "Building elevation renders",
+        "Interior room renders",
+        "Master plan flythrough",
+      ],
       image: architecturalVisImg,
     },
     {
