@@ -1,8 +1,6 @@
 import touchKioskImg from "../assets/images/touch_kiosk_display_1789055717373.jpg";
 import tabletMobileImg from "../assets/images/tablet_mobile_spatial_1789055738910.jpg";
-import constructionBimImg from "../assets/images/construction_bim_vis_1789322528856.jpg";
 import webInteractiveImg from "../assets/images/regenerated_image_1790059284114.jpg";
-import architecturalVisImg from "../assets/images/regenerated_image_1790262507326.jpg";
 import digitalTwinsImg from "../assets/images/regenerated_image_1790531249811.jpg";
 import virtualTours360Img from "../assets/images/regenerated_image_1790531713033.jpg";
 
@@ -122,7 +120,7 @@ export const WEBSITE_CONTENT = {
       badge: "High Precision 3D",
       subtitle: "Transform building plans into interactive 3D digital models",
       description:
-        "Transform building plans into interactive 3D digital models. Our digital twins provide accurate, detailed representations of real estate projects, allowing clients to explore every aspect of their future spaces with precision and clarity.",
+        "Transform blueprints into precise, interactive 3D digital models for immersive client exploration.",
       highlights: [
         "1:1 scale blueprint to 3D translation",
         "Interactive spatial navigation & measurements",
@@ -152,7 +150,7 @@ export const WEBSITE_CONTENT = {
       badge: "Interactive Customization",
       subtitle: "Visualize interior design concepts in interactive 3D",
       description:
-        "Visualize interior design concepts in interactive 3D environments. From furniture placement to color schemes and material selections, our VR solutions allow you to experiment with design options and see the final result before implementation.",
+        "Test dynamic layouts, finishes, and color schemes interactively before breaking ground.",
       highlights: [
         "Dynamic custom finishes & material palettes",
         "Furniture placement & spatial flow testing",
@@ -167,7 +165,7 @@ export const WEBSITE_CONTENT = {
       badge: "Zero Installation",
       subtitle: "Interactive spatial exploration from any browser",
       description:
-        "Customers explore the project through an interactive web browser experience from the comfort of their own home. Full project walkthrough, floor plan exploration, and amenity showcase — accessible from any browser on any device.",
+        "Explore full project walkthroughs and interactive floor plans instantly from any browser.",
       highlights: [
         "Full project walkthrough & 3D navigation",
         "Interactive floor plan exploration",
@@ -197,7 +195,7 @@ export const WEBSITE_CONTENT = {
       badge: "Cross-Platform Access",
       subtitle: "High-performance spatial presentation tools for brokers, agents, and buyers",
       description:
-        "Empower brokers, sales teams, and buyers with seamless tablet and mobile spatial apps. Showcase your entire development portfolio on iPads and smartphones with smooth 60 FPS real-time rendering, offline synchronization, and instant sharing.",
+        "Present fluid 60 FPS spatial portfolios anywhere on native iOS and Android apps.",
       highlights: [
         "Optimized for iPad Pro, iOS & Android devices",
         "Offline presentation mode for client pitches",
@@ -212,42 +210,13 @@ export const WEBSITE_CONTENT = {
       badge: "Frictionless WebXR",
       subtitle: "Browser-accessible panoramic tours with zero app installation",
       description:
-        "Deliver frictionless, high-resolution panoramic walkthroughs that load instantly on any web browser or mobile device without apps or plugins. Features interactive hotspots, floor plan minimaps, embedded audio narration, and lead capture forms.",
+        "Instant, plugin-free panoramic walkthroughs complete with interactive hotspots, minimaps, and integrated lead capture.",
       highlights: [
         "Sales without flights",
         "Channel Partner reach",
         "Works on every device",
       ],
       image: virtualTours360Img,
-    },
-    {
-      id: "architectural-visuallization",
-      title: "Architectural Visuallization",
-      category: "CGI Stills & Elevations",
-      badge: "Ultra 8K Stills",
-      subtitle: "Photorealistic exterior and interior architectural CGI renderings",
-      description:
-        "Photorealistic renders, master plan flythroughs, and interactive interiors — built from your architectural drawings before a single brick is laid. Used by India's leading developers to launch projects with confidence and close pre-construction inventory faster.",
-      highlights: [
-        "Building elevation renders",
-        "Interior room renders",
-        "Master plan flythrough",
-      ],
-      image: architecturalVisImg,
-    },
-    {
-      id: "construction-design-visuallization",
-      title: "Construction & Design visuallization",
-      category: "BIM & Phasing Simulation",
-      badge: "4D Construction Phasing",
-      subtitle: "Bridge architectural schematics, construction sequencing, and MEP coordination",
-      description:
-        "Eliminate on-site clash errors, align contractor trades, and present clear progress milestones to investors and project stakeholders.",
-      highlights: [
-        "4D timeline sequencing to final handover",
-        "Investor milestone presentations & fly-throughs",
-      ],
-      image: constructionBimImg,
     },
   ] as ServiceItem[],
 

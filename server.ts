@@ -24,17 +24,22 @@ function getAIClient(): GoogleGenAI {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
+  const distExists = fs.existsSync(path.join(process.cwd(), "dist", "index.html"));
+  const isDev = process.env.npm_lifecycle_event === "dev" || process.env.NODE_ENV === "development";
   const isProduction =
-    process.env.NODE_ENV === "production" ||
-    process.env.npm_lifecycle_event === "start" ||
-    Boolean(process.argv[1]?.includes("dist"));
+    !isDev &&
+    (process.env.NODE_ENV === "production" ||
+      process.env.npm_lifecycle_event === "start" ||
+      Boolean(process.env.K_SERVICE) ||
+      Boolean(process.env.PORT && process.env.PORT !== "3000") ||
+      distExists);
 
   app.use(express.json());
 
   // Health check
-  app.get("/api/health", (_req, res) => {
+  app.get(["/health", "/api/health"], (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
 

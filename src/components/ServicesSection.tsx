@@ -7,8 +7,6 @@ import {
   Monitor,
   Tablet,
   Eye,
-  Building2,
-  HardHat,
   CheckCircle,
   ArrowRight,
   Sparkles,
@@ -28,8 +26,6 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
     "interactive-touch-kiosks": Monitor,
     "tablet-mobile-experience": Tablet,
     "360-virtual-tours": Eye,
-    "architectural-visuallization": Building2,
-    "construction-design-visuallization": HardHat,
   };
 
   return (
